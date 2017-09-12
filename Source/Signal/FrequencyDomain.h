@@ -1,0 +1,60 @@
+#pragma once
+
+#include <AudioData/AudioData.h>
+#include <vector>
+
+namespace Signal  {
+
+struct FrequencyBin
+{
+	FrequencyBin() : reX_(0.0), imX_(0.0) { }
+	FrequencyBin(double reX, double imX) : reX_(reX), imX_(imX) { }
+	double reX_;
+	double imX_;
+};
+
+class FrequencyDomain
+{
+	public:
+		FrequencyDomain();
+		FrequencyDomain(std::vector<Signal::FrequencyBin> FrequencyBin);
+
+		void PushFrequencyBin(Signal::FrequencyBin FrequencyBin);
+
+		std::size_t GetSize() const;
+
+		const FrequencyBin& GetBin(std::size_t binNumber) const;
+
+		const std::vector<double>& GetMagnitudes();
+		const std::vector<double>& GetWrappedPhases();
+		const std::vector<double>& GetRealComponent();
+		const std::vector<double>& GetImaginaryComponent();
+		std::vector<Signal::FrequencyBin> GetRectangularFrequencyData() const;
+
+	private:
+		double CalculateArcTangent(double imaginary, double real);
+		enum Quadrant
+		{
+		        QUADRANT1,
+		        QUADRANT2,
+		        QUADRANT3,
+		        QUADRANT4,
+		        BETWEEN_QUADRANT1_AND_QUADRANT2,
+		        BETWEEN_QUADRANT2_AND_QUADRANT3,
+		        BETWEEN_QUADRANT3_AND_QUADRANT4,
+		        BETWEEN_QUADRANT4_AND_QUADRANT1
+		};
+
+		Quadrant GetQuadrant(double reX, double imX);
+		double GetWrappedPhase(double reX, double imX);
+
+		std::vector<FrequencyBin> data_;
+
+		// Cached data, lazy initialized
+		std::vector<double> magnitudes_;
+		std::vector<double> wrappedPhases_;
+		std::vector<double> realComponent_;
+		std::vector<double> imaginaryComponent_;
+};
+
+}
