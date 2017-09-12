@@ -1,0 +1,27 @@
+cmake_minimum_required(VERSION 3.0)
+ 
+function(include_external cmake_file project_name)
+	configure_file(${cmake_file} ${project_name}-download/CMakeLists.txt)
+	execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .  WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/${project_name}-download")
+	execute_process(COMMAND "${CMAKE_COMMAND}" --build .  WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/${project_name}-download" )
+	add_subdirectory("${CMAKE_BINARY_DIR}/${project_name}-src" "${CMAKE_BINARY_DIR}/${project_name}-build")
+endfunction()
+function(include_external cmake_file project_name)
+	configure_file(${cmake_file} ${project_name}-download/CMakeLists.txt)
+	execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .  WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/${project_name}-download")
+	execute_process(COMMAND "${CMAKE_COMMAND}" --build .  WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/${project_name}-download" )
+	add_subdirectory("${CMAKE_BINARY_DIR}/${project_name}-src" "${CMAKE_BINARY_DIR}/${project_name}-build")
+endfunction()
+
+function(include_externals)
+	# Pulldown GoogleTest
+	if(MSVC)
+		set(gtest_force_shared_crt ON CACHE BOOL "" FORCE) # Prevent GoogleTest from overriding options when building with MSVC
+	endif(MSVC)
+	include_external(CMakeSupport/CMakeLists.GoogleTest.txt googletest)
+	
+	# Pulldown YamlCpp
+	option(YAML_CPP_BUILD_TOOLS "Enable testing and parse tools" OFF)
+	option(MSVC_SHARED_RT "MSVC: Build with shared runtime libs (/MD)" OFF)
+	include_external(CMakeSupport/CMakeLists.YamlCpp.txt yamlcpp)
+endfunction()	
