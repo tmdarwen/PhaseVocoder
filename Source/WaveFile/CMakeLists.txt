@@ -2,7 +2,7 @@ include_directories("${PROJECT_SOURCE_DIR}")
 file(GLOB source_files [^.]*.h [^.]*.cpp "Source/[^.]*.h" "Source/[^.]*.cpp")
 add_library(WaveFile ${source_files})
 
-target_link_libraries(WaveFile AudioData Utilities)
+target_link_libraries(WaveFile AudioData Signal Utilities)
 
 set_target_properties(WaveFile PROPERTIES FOLDER Libs)
 
