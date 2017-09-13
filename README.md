@@ -42,13 +42,13 @@ Resample Example - Change the sample rate to 88,200 Hz:<br>
 
 **Tests**
 
-Unit test coverage is extensive.  You'll notice every component within the source directory has a UT directory which contains unit tests.  These of course automatically build and run as part of the application build process.
+Unit test coverage is extensive.  You'll notice every component within the source directory has a UT directory which contains unit tests.  These of course automatically build and run as part of the build process.
 
  
 
 **Miscellaneous Notes Concerning the Project**
 
--   Currently only support mono 16 bit wave files as input.
+-   Currently only supports mono 16 bit wave files as input.
 
 -   External dependencies are [GoogleTest](https://github.com/google/googletest) and [yaml-cpp](https://github.com/jbeder/yaml-cpp).  These GitHub repos will be cloned automatically when CMake runs.
 
@@ -56,7 +56,7 @@ Unit test coverage is extensive.  You'll notice every component within the sourc
 
 **To Do**
 
--   Allow for stereo wave files (currently only supports mono audio)
+-   Support for stereo wave files (currently only supports mono audio) of any bit resolution (currently only supports 16 bit).
 
--   Add multithreading to speed up processing
+-   Add multithreading to speed up processing.
 
