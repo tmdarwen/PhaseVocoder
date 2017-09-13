@@ -9,11 +9,11 @@ A command line utility implementing a [phase vocoder](https://en.wikipedia.org/w
 
 1.   Clone this repo.
 
-1.   Create a new directory at the parallel level as the cloned repo to hold the project files.
+1.   Create a new directory at the parallel level as the cloned repo.  This directory will hold the project files CMake creates.
 
 1.   cd into this new directory.
 
-1.   From a command line, run _cmake -G <GeneratorType> ../PhaseVocoder/Source_
+1.   From the command line, run _cmake -G <GeneratorType> ../PhaseVocoder/Source_
 
 1.   Build the project
 
