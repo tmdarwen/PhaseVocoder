@@ -21,20 +21,20 @@ A command line utility implementing a [phase vocoder](https://en.wikipedia.org/w
 
 **Usage**
 
-Time Stretching Example - Increase the length of the input by a factor of two:
+Time Stretching Example - Increase the length of the input by a factor of two:<br>
 ```PhaseVocoder -i in.wav -o out.wav -s 2.0```
 
-Time Compression Example - Reduce the length of the input by twenty percent:
-PhaseVocoder -input in.wav -output out.wav -stretch 0.8
+Time Compression Example - Reduce the length of the input by twenty percent:<br>
+```PhaseVocoder -input in.wav -output out.wav -stretch 0.8```
 
-Pitch Shift Example - Raise the pitch of the audio by 2 semitones:
-PhaseVocoder -i in.wav -o out.wav -s -p 2.0
+Pitch Shift Example - Raise the pitch of the audio by 2 semitones:<br>
+```PhaseVocoder -i in.wav -o out.wav -s -p 2.0```
 
-Pitch Shift Example - Drop the pitch of the audio by 3.1 semitones:
-PhaseVocoder -i in.wav -o out.wav -s -p -3.1
+Pitch Shift Example - Drop the pitch of the audio by 3.1 semitones:<br>
+```PhaseVocoder -i in.wav -o out.wav -s -p -3.1```
 
-Resample Example - Change the sample rate to 88,200 Hz:
-PhaseVocoder -i in.wav -o out.wav -s -r 88200
+Resample Example - Change the sample rate to 88,200 Hz:<br>
+```PhaseVocoder -i in.wav -o out.wav -s -r 88200```
 
  
 
