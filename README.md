@@ -1,7 +1,7 @@
 PhaseVocoder
 ============
 
-A command line utility implementing a [phase vocoder](https://en.wikipedia.org/wiki/Phase_vocoder).  The phase vocoder allows for time stretching/compressing, pitch shifting and resampling of audio with quite a good degree of quality.  For audio samples and additional information please see [this page](http://www.tmdarwen.com/projects/phase-vocoder).  I've successfully built this project on Windows 10, OS X (El Capitan) and Linux (Lubuntu).  For building on your platform please see the steps below.
+A command line utility implementing a [phase vocoder](https://en.wikipedia.org/wiki/Phase_vocoder).  The phase vocoder allows for time compression/expansion, pitch shifting and resampling of audio with quite a good degree of quality.  For audio samples and additional information please see [this page](http://www.tmdarwen.com/projects/phase-vocoder).  I've successfully built this project on Windows 10, OS X (El Capitan) and Linux (Lubuntu).  For building on your platform please see the steps below.
 
  
 
@@ -48,7 +48,7 @@ Unit test coverage is extensive.  You'll notice every component within the sourc
 
 **Miscellaneous Notes Concerning the Project**
 
--   Currently only supports mono 16 bit wave files as input.
+-   Currently supports mono 16 bit wave files as the only form of input.
 
 -   External dependencies are [GoogleTest](https://github.com/google/googletest) and [yaml-cpp](https://github.com/jbeder/yaml-cpp).  These GitHub repos will be cloned automatically when CMake runs.
 
