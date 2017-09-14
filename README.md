@@ -13,7 +13,7 @@ A command line utility implementing a [phase vocoder](https://en.wikipedia.org/w
 
 1.   cd into this new directory.
 
-1.   From the command line, run _cmake -G <GeneratorType> ../PhaseVocoder/Source_
+1.   From the command line, run _cmake -G YourDesiredGeneratorType ../PhaseVocoder/Source_
 
 1.   Build the project
 
