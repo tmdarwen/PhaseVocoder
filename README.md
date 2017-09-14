@@ -21,7 +21,7 @@ A command line utility implementing a [phase vocoder](https://en.wikipedia.org/w
 
 **Usage Examples**
 
-Running the PhaseVocoder application from the command line will show all possible usage.  The following examples show some of the more common usages.
+Running the PhaseVocoder application from the command line with no arguments will show all possible usage.  The following examples show some of the more common usages.
 
 Time Stretching Example - Increase the length of the input by a factor of two:<br>
 ```PhaseVocoder -i in.wav -o out.wav -s 2.0```
