@@ -1,7 +1,13 @@
 PhaseVocoder
 ============
 
-A command line utility implementing a [phase vocoder](https://en.wikipedia.org/wiki/Phase_vocoder).  The phase vocoder allows for time compression/expansion, pitch shifting and resampling of audio with quite a good degree of quality.  For audio samples and additional information please see [this page](http://www.tmdarwen.com/projects/phase-vocoder).  I've successfully built this project on Windows 10, OS X (El Capitan) and Linux (Lubuntu).  For building on your platform please see the steps below.
+A command line utility implementing a [phase vocoder](https://en.wikipedia.org/wiki/Phase_vocoder).  The phase vocoder allows for time compression/expansion, pitch shifting and resampling of audio with quite a good degree of quality.  For audio samples and additional information please see [this page](http://www.tmdarwen.com/projects/phase-vocoder).  I've successfully built the PhaseVocoder on Windows 10, OS X (El Capitan) and Linux (Lubuntu).  For building on your platform, please see the steps below.
+
+ 
+
+**How the PhaseVocoder Works**
+
+For information on how the PhaseVocoder works, please see [this PDF document](Documentation/HowThePhaseVocoderWorks.pdf) I created.
 
  
 
