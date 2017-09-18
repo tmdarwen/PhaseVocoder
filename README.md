@@ -11,6 +11,16 @@ For information on how the PhaseVocoder works, please see [this PDF document](Do
 
  
 
+**Build Dependencies**
+
+-   Building this project requires [CMake](https://cmake.org) version 3.0 or later.
+
+-   Building this project requires a C++14 compliant compiler.  This project is routinely built in my continous integration system which uses MS Visual Studio 2017, GCC 5.3.1 and Apple LLVM version 7.3.0 (clang 703.0.31).
+
+-   External dependencies are [GoogleTest](https://github.com/google/googletest) and [yaml-cpp](https://github.com/jbeder/yaml-cpp).  You do *not* need to clone or install these dependencies manually. The GitHub repos will be cloned automatically when CMake runs.
+
+ 
+
 **Steps for Building**
 
 1.   Clone this repo.
@@ -56,7 +66,6 @@ Unit test coverage is extensive.  You'll notice every component within the sourc
 
 -   Currently supports mono 16 bit wave files as the only form of input.
 
--   External dependencies are [GoogleTest](https://github.com/google/googletest) and [yaml-cpp](https://github.com/jbeder/yaml-cpp).  These GitHub repos will be cloned automatically when CMake runs.
 
  
 
