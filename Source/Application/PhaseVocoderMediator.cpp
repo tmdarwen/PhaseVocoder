@@ -33,6 +33,7 @@
 #include <Utilities/Exception.h>
 #include <iostream>
 #include <cmath>
+#include <algorithm>
 
 PhaseVocoderMediator::PhaseVocoderMediator(const PhaseVocoderSettings& settings) : settings_{settings}
 {
@@ -148,11 +149,7 @@ void PhaseVocoderMediator::HandleSilenceInInput(std::size_t sampleCount)
 	std::size_t currentSamplePosition{0};
 	while(currentSamplePosition < samplesToOutput)
 	{
-		std::size_t currentWriteAmount{bufferSize_};
-		if(currentSamplePosition + bufferSize_ > samplesToOutput)
-		{
-			currentWriteAmount = samplesToOutput - currentSamplePosition;
-		}
+		std::size_t currentWriteAmount{std::min(bufferSize_, samplesToOutput - currentSamplePosition)};
 
 		AudioData silentAudioData;
 		silentAudioData.AddSilence(currentWriteAmount);
@@ -173,15 +170,9 @@ void PhaseVocoderMediator::ProcessAudioSection(std::size_t startSamplePosition, 
 	std::size_t currentSamplePosition{0};
 	while(currentSamplePosition < totalSamplesToRead)
 	{
-		std::size_t samplesToRead{bufferSize_};
-		if(currentSamplePosition + bufferSize_ > totalSamplesToRead)
-		{
-			samplesToRead = totalSamplesToRead - currentSamplePosition;
-		}
-
+		std::size_t samplesToRead{std::min(bufferSize_, totalSamplesToRead - currentSamplePosition)};
 		auto audioInputData{GetAudioInput(startSamplePosition + currentSamplePosition, samplesToRead)};
 		ProcessInput(audioInputData);
-
 		currentSamplePosition += samplesToRead;
 	}
 
@@ -242,13 +233,7 @@ AudioData PhaseVocoderMediator::ProcessAudioWithPhaseVocoder(const AudioData& au
 
 	while(phaseVocoder_->OutputSamplesAvailable())
 	{
-		std::size_t samplesToRetrieve{bufferSize_};
-		if(samplesToRetrieve > phaseVocoder_->OutputSamplesAvailable())
-		{
-			samplesToRetrieve = phaseVocoder_->OutputSamplesAvailable();
-		}
-
-		dataToReturn.Append(phaseVocoder_->GetAudioData(samplesToRetrieve));
+		dataToReturn.Append(phaseVocoder_->GetAudioData(std::min(bufferSize_, phaseVocoder_->OutputSamplesAvailable())));
 	}
 
 	// If transient overlap data exist, mix it with this output
@@ -302,13 +287,7 @@ AudioData PhaseVocoderMediator::ProcessAudioWithResampler(const AudioData& audio
 
 	while(resampler_->OutputSamplesAvailable())
 	{
-		std::size_t samplesToRetrieve{bufferSize_};
-		if(samplesToRetrieve > resampler_->OutputSamplesAvailable())
-		{
-			samplesToRetrieve = resampler_->OutputSamplesAvailable();
-		}
-
-		dataToReturn.Append(resampler_->GetAudioData(samplesToRetrieve));
+		dataToReturn.Append(resampler_->GetAudioData(std::min(bufferSize_, resampler_->OutputSamplesAvailable())));
 	}
 
 	return dataToReturn;
