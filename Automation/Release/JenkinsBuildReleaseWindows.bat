@@ -7,17 +7,20 @@ REM Switch to the tag
 git checkout -b PhaseVocoderTag v%Version%
 
 REM Run CMake
-mkdir Build
-cd Build
+echo "Creating build dir"
+mkdir PhaseVocoderBuilt
+echo "Accessing build dir"
+cd PhaseVocoderBuilt
+echo "Running cmake"
 cmake -D VERSION_NUMBER=%Version% -D BUILD_NUMBER=%BUILD_NUMBER% -G "%CMakeGeneratorString%" ..\Source
 IF %ERRORLEVEL% NEQ 0 (
     ECHO CMake failed
     EXIT 1
 )
 
-REM Build only PhaseVocoder
-cd PhaseVocoder
-devenv PhaseVocoder.vcxproj /Build Release
+REM Do the build
+echo "Building release version of PhaseVocoder"
+devenv PhaseVocoder.sln /Build Release
 IF %ERRORLEVEL% NEQ 0 (
     ECHO The build failed    
     EXIT 1
