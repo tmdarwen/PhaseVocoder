@@ -27,8 +27,8 @@ IF %ERRORLEVEL% NEQ 0 (
 )
 
 REM Zip the executable
-echo "7z" a -tzip PhaseVocoder.zip "%WORKSPACE%\Build\Application\Release\PhaseVocoder.exe" 
-"7z" a -tzip PhaseVocoder.zip "%WORKSPACE%\Build\Application\Release\PhaseVocoder.exe" 
+echo "7z" a -tzip PhaseVocoder.zip "%WORKSPACE%\PhaseVocoderBuilt\Application\Release\PhaseVocoder.exe" 
+"7z" a -tzip PhaseVocoder.zip "%WORKSPACE%\PhaseVocoderBuilt\Application\Release\PhaseVocoder.exe" 
 
 IF %ERRORLEVEL% NEQ 0 (
     ECHO Zipping PhaseVocoder.exe failed
