@@ -1,6 +1,8 @@
 ECHO Building PhaseVocoder version number %Version% 
 ECHO Build number is %BUILD_NUMBER%
 
+call "%VisualStudioPath%\vcvarsall.bat" amd64
+
 REM Switch to the tag
 git checkout -b PhaseVocoderTag v%Version%
 
