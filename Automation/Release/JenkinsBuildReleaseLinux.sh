@@ -22,7 +22,7 @@ then
 	exit 1
 fi
 
-cmake -D CMAKE_BUILD_TYPE=Release -D VERSION_NUMBER=${Version} -D BUILD_NUMBER=${BUILD_NUMBER} -G "Unix Makefiles" ../
+cmake -D CMAKE_BUILD_TYPE=Release -D VERSION_NUMBER=${Version} -D BUILD_NUMBER=${BUILD_NUMBER} -G "Unix Makefiles" ../Source
 if [ $? -ne 0 ]
 then
 	echo "Executing cmake failed"
