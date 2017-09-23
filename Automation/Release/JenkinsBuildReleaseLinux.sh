@@ -36,7 +36,7 @@ then
 	exit 1
 fi
 
-zip -j PhaseVocoder.zip "${WORKSPACE}/Application/Release/PhaseVocoder"
+zip -j PhaseVocoder.zip "${WORKSPACE}/ReleaseBuild/Application/PhaseVocoder"
 if [ $? -ne 0 ]
 then
 	echo "Failed to zip PhaseVocoder"
