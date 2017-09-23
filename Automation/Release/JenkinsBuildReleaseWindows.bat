@@ -34,3 +34,13 @@ IF %ERRORLEVEL% NEQ 0 (
     ECHO Zipping PhaseVocoder.exe failed
     EXIT 1
 )
+
+REM Copy the resulting installer to the Releases folder
+echo copy PhaseVocoder.zip %ReleaseDestination%\PhaseVocoder-Win64-%Version%-%BUILD_NUMBER%.zip
+copy PhaseVocoder.zip %ReleaseDestination%\PhaseVocoder-Win64-%Version%-%BUILD_NUMBER%.zip
+
+IF %ERRORLEVEL% NEQ 0 (
+    ECHO Copying PhaseVocoder.exe to release destination 
+    EXIT 1
+)
+
