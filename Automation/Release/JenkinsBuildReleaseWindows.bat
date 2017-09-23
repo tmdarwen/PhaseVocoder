@@ -4,7 +4,7 @@ ECHO Build number is %BUILD_NUMBER%
 call "%VisualStudioPath%\vcvarsall.bat" amd64
 
 REM Switch to the tag
-git checkout -b PhaseVocoderTag v%Version%
+git checkout tags/v%Version%
 
 REM Run CMake
 echo "Creating build dir"
