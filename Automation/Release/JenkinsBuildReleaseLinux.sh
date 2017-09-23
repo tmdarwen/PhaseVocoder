@@ -1,10 +1,10 @@
 echo "Version number is ${Version}"
 echo "Build number is ${BUILD_NUMBER}"
 
-git checkout -b PhaseVocoderTag v${Version}
+git checkout tags/v${Version}
 if [ $? -ne 0 ]
 then
-	echo "Failed to switch to tag"
+	echo "Failed to checkout tag"
 	exit 1
 fi
 
