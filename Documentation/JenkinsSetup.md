@@ -25,7 +25,7 @@ Part of the awesomeness of this is having my latest changes built with various C
 
 **Setting Up Continuous Integration Jenkins Projects**
 
-Once you have Jenkins and your build agents setup, creating a new CI job is easy.  Click "New Item" and give it a name.  Under "Source Code Management" setup, select "Git" and set the repo to https://github.com/tmdarwen/PhaseVocoder.git and branch to master as shown below.
+Once you have Jenkins and your build agents setup, creating a new CI job is easy.  Click "New Item" and give it a name.  Under "Source Code Management" select "Git", set the repo to https://github.com/tmdarwen/PhaseVocoder.git and branch to master as shown below.
 
 ![Jenkins Source Code Management](Images/JenkinsSourceCodeManagement.png)
 
