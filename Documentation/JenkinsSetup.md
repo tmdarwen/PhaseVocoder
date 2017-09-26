@@ -7,7 +7,7 @@ For my own development, I use [Jenkins](https://jenkins.io/) as a build server. 
 
 As shown below, I have various Jenkins projects setup for the PhaseVocoder project.  These include both continuous integration (CI) and release building on Windows, OS X and Linux.
 
-[Jenkins PhaseVocoder Projects](Images/JenkinsPhaseVocoderGitHubProjects.png)
+![Jenkins PhaseVocoder Projects](Images/JenkinsPhaseVocoderGitHubProjects.png)
 
 
  
