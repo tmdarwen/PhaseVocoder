@@ -13,6 +13,7 @@ As shown below, I have various Jenkins projects setup for the PhaseVocoder proje
  
 
 **Setting Up Jenkins**
+
 I'm not going to include specific instructions for setting up Jenkins.  Doing a simple search will give you numerous helpful instructions on how to do this.
 
 Currently (Fall 2017), my personal development environment has Jenkins running on my main development machine and uses VMs for Jenkins' build agents.  I have VMs running Windows, Linux (Ubuntu) and OS X (El Capitan).  As soon as a new commit happens to the master branch of the GitHub PhaseVocoder project, the repo is cloned and built on each of these machines.
