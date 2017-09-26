@@ -22,7 +22,7 @@ then
 	exit 1
 fi
 
-/usr/local/bin/cmake -D VERSION_NUMBER=${Version} -D BUILD_NUMBER=${BUILD_NUMBER} -D CMAKE_BUILD_TYPE=Release -G "Xcode" ../
+/usr/local/bin/cmake -D VERSION_NUMBER=${Version} -D BUILD_NUMBER=${BUILD_NUMBER} -D CMAKE_BUILD_TYPE=Release -G "Xcode" ../Source
 if [ $? -ne 0 ]
 then
 	echo "Executing cmake failed"
