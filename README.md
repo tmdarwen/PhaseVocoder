@@ -62,6 +62,12 @@ Unit test coverage is extensive.  You'll notice every component within the sourc
 
  
 
+**Continuous Integration and Automated Release**
+
+The Automation directory contains scripts that can be used with [Jenkins](https://jenkins.io/) to setup contininuous integration and automated release building on the PhaseVocoder project.  These scripts work on Windows, OS X and Linux.  For more information on how I personally leveage these scripts for continuous integration and automated release building please see [this document](Documentation/JenkinsSetup.md).
+
+ 
+
 **Miscellaneous Notes Concerning the Project**
 
 -   Currently supports mono 16 bit wave files as the only form of input.
