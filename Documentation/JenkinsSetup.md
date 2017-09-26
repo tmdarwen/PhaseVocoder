@@ -29,11 +29,11 @@ Once you have Jenkins and your build agents setup, creating a new CI job is easy
 
 ![Jenkins Source Code Management](Images/JenkinsSourceCodeManagement.png)
 
-Set the build trigger to poll the source code management system and on a schedule as shown below.  The schedule I've specified checks the PhaseVocoder GitHub repo every five minutes.  If it finds a change has occurred since it last checked, it will kick off a new build.
+As shown below, set the build trigger to poll the source code management system.  The schedule I've specified checks the PhaseVocoder GitHub repo every five minutes.  If it finds a change has occurred since it last checked, it will kick off a new build.
 
 ![Jenkins Build Triggers](Images/JenkinsBuildTriggers.png)
 
-Under the "build" section, simply specify the script to run to make the build happen as shown below.  Note that these scripts can be found in the Automation directory of the PhaseVocoder project.
+Under the "build" section, simply specify the build script Jenkins should run.  Note that these scripts can be found in the Automation directory of the PhaseVocoder project.
 
 ![Jenkins Build](Images/JenkinsBuild.png)
 
