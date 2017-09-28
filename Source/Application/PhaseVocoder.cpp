@@ -123,6 +123,11 @@ int PerformPhaseVocoding(CommandLineArguments& commandLineArguments)
 	{
 		auto phaseVocoderMediator{GetPhaseVocoderMediator(commandLineArguments)};
 		phaseVocoderMediator->Process();
+
+		std::cout << "Total Processing Time: " << phaseVocoderMediator->GetTotalProcessingTime() << std::endl;
+		std::cout << "Transient Processing Time: " << phaseVocoderMediator->GetTransientProcessingTime() << std::endl;
+		std::cout << "PhaseVocoder Processing Time: " << phaseVocoderMediator->GetPhaseVocoderProcessingTime() << std::endl;
+		std::cout << "Resampler Processing Time: " << phaseVocoderMediator->GetResamplerProcessingTime() << std::endl;
 	}
 	catch(Utilities::Exception& exception)
 	{

@@ -52,6 +52,11 @@ class PhaseVocoderMediator
 
 		void Process();
 
+		double GetTotalProcessingTime();
+		double GetTransientProcessingTime();
+		double GetPhaseVocoderProcessingTime();
+		double GetResamplerProcessingTime();
+
 	private:
 		void HandleSilenceInInput(std::size_t sampleCount);
 
@@ -91,5 +96,10 @@ class PhaseVocoderMediator
 		std::unique_ptr<Signal::Resampler> resampler_;
 		std::unique_ptr<WaveFile::WaveFileReader> waveReader_;
 		std::unique_ptr<WaveFile::WaveFileWriter> waveWriter_;
+
+		double totalProcessingTime_{0.0};
+		double transientProcessingTime_{0.0};
+		double phaseVocoderProcessingTime_{0.0};
+		double resamplerProcessingTime_{0.0};
 
 };

@@ -31,6 +31,7 @@
 #include <Signal/PhaseVocoder.h>
 #include <Signal/Resampler.h>
 #include <Utilities/Exception.h>
+#include <Utilities/Timer.h>
 #include <iostream>
 #include <cmath>
 #include <algorithm>
@@ -47,6 +48,8 @@ PhaseVocoderMediator::~PhaseVocoderMediator()
 
 void PhaseVocoderMediator::Process()
 {
+	Utilities::Timer timer(Utilities::Timer::Action::START_NOW);
+	
 	InstantiateWaveFileObjects();
 
 	InstantiateResampler();
@@ -56,7 +59,9 @@ void PhaseVocoderMediator::Process()
 		// Even if we don't stretch the audio, and are just pitch shifting, the pitch shifter requires 
 		// stretching, and if we're stretching, we want to properly handle transients so the audio 
 		// quality doesn't suffer.
+		Utilities::Timer transientTimer(Utilities::Timer::Action::START_NOW);
 		ObtainTransients();
+		transientProcessingTime_ = transientTimer.Stop();
 	}
 
 	// If we're not stretching, pitch shifting or resampling the audio, we must have only been 
@@ -96,6 +101,28 @@ void PhaseVocoderMediator::Process()
 		auto audioData{resampler_->FlushAudioData()};
 		waveWriter_->AppendAudioData(audioData.GetData());
 	}
+
+	totalProcessingTime_ = timer.Stop();
+}
+
+double PhaseVocoderMediator::GetTotalProcessingTime()
+{
+	return totalProcessingTime_;
+}
+
+double PhaseVocoderMediator::GetTransientProcessingTime()
+{
+	return transientProcessingTime_;
+}
+
+double PhaseVocoderMediator::GetPhaseVocoderProcessingTime()
+{
+	return phaseVocoderProcessingTime_;
+}
+
+double PhaseVocoderMediator::GetResamplerProcessingTime()
+{
+	return resamplerProcessingTime_;
 }
 
 void PhaseVocoderMediator::ObtainTransients()
@@ -217,7 +244,9 @@ void PhaseVocoderMediator::FinalizeAudioSection(std::size_t totalInputSamples)
 
 	if(audioData.GetSize() && (settings_.ResampleValueGiven() || settings_.PitchShiftValueGiven()))
 	{
+		Utilities::Timer timer(Utilities::Timer::Action::START_NOW);
 		resampler_->SubmitAudioData(audioData);
+		resamplerProcessingTime_ += timer.Stop();
 	}
 	else
 	{
@@ -227,6 +256,8 @@ void PhaseVocoderMediator::FinalizeAudioSection(std::size_t totalInputSamples)
 
 AudioData PhaseVocoderMediator::ProcessAudioWithPhaseVocoder(const AudioData& audioInputData)
 {
+	Utilities::Timer timer(Utilities::Timer::Action::START_NOW);
+
 	phaseVocoder_->SubmitAudioData(audioInputData);
 
 	AudioData dataToReturn;
@@ -245,11 +276,15 @@ AudioData PhaseVocoderMediator::ProcessAudioWithPhaseVocoder(const AudioData& au
 
 	samplesOutputFromCurrentPhaseVocoder_ += dataToReturn.GetSize();
 
+	phaseVocoderProcessingTime_ += timer.Stop();
+
 	return dataToReturn;
 }
 
 AudioData PhaseVocoderMediator::FlushPhaseVocoderOutput(std::size_t samplesNeeded)
 {
+	Utilities::Timer timer(Utilities::Timer::Action::START_NOW);
+
 	AudioData audioToReturn;
 	auto flushedOutput{phaseVocoder_->FlushAudioData()};
 
@@ -276,11 +311,15 @@ AudioData PhaseVocoderMediator::FlushPhaseVocoderOutput(std::size_t samplesNeede
 		transientSectionOverlap_.Append(flushedOutput.Retrieve(transientSectionOverlapSampleCount_));
 	}
 
+	phaseVocoderProcessingTime_ += timer.Stop();
+
 	return audioToReturn;
 }
 
 AudioData PhaseVocoderMediator::ProcessAudioWithResampler(const AudioData& audioInputData)
 {
+	Utilities::Timer timer(Utilities::Timer::Action::START_NOW);
+
 	resampler_->SubmitAudioData(audioInputData);
 
 	AudioData dataToReturn;
@@ -289,6 +328,8 @@ AudioData PhaseVocoderMediator::ProcessAudioWithResampler(const AudioData& audio
 	{
 		dataToReturn.Append(resampler_->GetAudioData(std::min(bufferSize_, resampler_->OutputSamplesAvailable())));
 	}
+
+	resamplerProcessingTime_ += timer.Stop();
 
 	return dataToReturn;
 }
