@@ -26,10 +26,11 @@
 
 #include <gtest/gtest.h>
 #include <Signal/LowPassFilter.h>
-#include <WaveFile/WaveFileReader.h>
-#include <WaveFile/WaveFileWriter.h>
 #include <Utilities/Exception.h>
 #include <Utilities/File.h>
+#include <WaveFile/WaveFileDefines.h>
+#include <WaveFile/WaveFileReader.h>
+#include <WaveFile/WaveFileWriter.h>
 
 void DoLowPassFiltering(const std::string& inputFilename, const std::string& outputFilename, std::size_t cutoffFrequency)
 {
@@ -38,7 +39,7 @@ void DoLowPassFiltering(const std::string& inputFilename, const std::string& out
 	double cutoffRatio{static_cast<double>(cutoffFrequency) / static_cast<double>(inputWaveFile.GetSampleRate())};
 	Signal::LowPassFilter lowPassFilter{cutoffRatio};
 
-	lowPassFilter.SubmitAudioData(AudioData(inputWaveFile.GetAudioData(), inputWaveFile.GetSampleCount()));
+	lowPassFilter.SubmitAudioData(inputWaveFile.GetAudioData()[WaveFile::MONO_CHANNEL]);
 
 	WaveFile::WaveFileWriter waveWriter(outputFilename, inputWaveFile.GetChannels(), inputWaveFile.GetSampleRate(), inputWaveFile.GetBitsPerSample());
 	waveWriter.AppendAudioData(lowPassFilter.FlushAudioData().GetData());

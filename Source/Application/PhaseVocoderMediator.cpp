@@ -26,12 +26,13 @@
 
 #include <Application/PhaseVocoderMediator.h>
 #include <Application/Transients.h>
-#include <WaveFile/WaveFileReader.h>
-#include <WaveFile/WaveFileWriter.h>
 #include <Signal/PhaseVocoder.h>
 #include <Signal/Resampler.h>
 #include <Utilities/Exception.h>
 #include <Utilities/Timer.h>
+#include <WaveFile/WaveFileDefines.h>
+#include <WaveFile/WaveFileReader.h>
+#include <WaveFile/WaveFileWriter.h>
 #include <iostream>
 #include <cmath>
 #include <algorithm>
@@ -166,7 +167,7 @@ void PhaseVocoderMediator::HandleLeadingSilence()
 
 AudioData PhaseVocoderMediator::GetAudioInput(std::size_t startSample, std::size_t length)
 {
-	return waveReader_->GetAudioData(startSample, length);
+	return waveReader_->GetAudioData(startSample, length)[WaveFile::MONO_CHANNEL];
 }
 
 void PhaseVocoderMediator::HandleSilenceInInput(std::size_t sampleCount)

@@ -38,7 +38,8 @@ void DoPhaseVocoding(const std::string& inputFilename, const std::string& output
 
 	Signal::PhaseVocoder phaseVocoder{inputWaveFile.GetSampleRate(), inputWaveFile.GetSampleCount(), stretchFactor};
 
-	phaseVocoder.SubmitAudioData(AudioData(inputWaveFile.GetAudioData(), inputWaveFile.GetSampleCount()));
+	//phaseVocoder.SubmitAudioData(AudioData(inputWaveFile.GetAudioData(), inputWaveFile.GetSampleCount()));
+	phaseVocoder.SubmitAudioData(inputWaveFile.GetAudioData()[0]);
 
 	WaveFile::WaveFileWriter waveWriter(outputFilename, inputWaveFile.GetChannels(), inputWaveFile.GetSampleRate(), inputWaveFile.GetBitsPerSample());
 	waveWriter.AppendAudioData(phaseVocoder.FlushAudioData().GetData());

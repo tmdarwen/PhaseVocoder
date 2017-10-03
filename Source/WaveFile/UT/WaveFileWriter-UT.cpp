@@ -52,7 +52,7 @@ TEST(WaveWriterTest, CreateWaveFileAndVerify)
 	EXPECT_EQ(WaveFile::WAVE_FILE_HEADER_SIZE, waveReader.GetWaveHeaderSize());
 
 	// Verify the data we wrote is the data that is in the file
-	auto readAudioData{waveReader.GetAudioData()};
+	auto readAudioData{waveReader.GetAudioData()[0].GetData()};
 	for(std::size_t i{0}; i < audioData.size(); ++i)
 	{
 		EXPECT_NEAR(audioData[i], readAudioData[i], 0.0001);	

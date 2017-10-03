@@ -27,9 +27,10 @@
 #include <Application/Transients.h>
 #include <Application/TransientConfigFile.h>
 #include <Signal/TransientDetector.h>
-#include <WaveFile/WaveFileReader.h>
 #include <Utilities/Exception.h>
 #include <Utilities/Stringify.h>
+#include <WaveFile/WaveFileDefines.h>
+#include <WaveFile/WaveFileReader.h>
 #include <yaml-cpp/yaml.h>
 #include <algorithm>
 
@@ -141,7 +142,7 @@ void Transients::GetTransientPositionsFromAudioFile()
 		auto audioData{waveReader.GetAudioData(samplesToRead)};
 
 		std::vector<std::size_t> newTransients;
-		if(transientDetector.FindTransients(audioData, newTransients))
+		if(transientDetector.FindTransients(audioData[WaveFile::MONO_CHANNEL], newTransients))
 		{
 			transients_.insert(transients_.end(), newTransients.begin(), newTransients.end());
 		}

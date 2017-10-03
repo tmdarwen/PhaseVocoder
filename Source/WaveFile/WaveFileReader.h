@@ -38,7 +38,7 @@ namespace WaveFile {
 class WaveFileReader
 {
 	public:
-  		WaveFileReader(const std::string& filename, bool bufferSmallFile=true, std::size_t maxBufferLimit=defaultBufferLimitInSamples_);
+  		WaveFileReader(const std::string& filename);
 		~WaveFileReader();
 
 		const WaveFile::WaveFileHeader& GetHeader();
@@ -55,14 +55,14 @@ class WaveFileReader
 		std::size_t GetWaveHeaderSize();
 
 		std::size_t GetSampleCount() const;
-		const double* GetAudioData() const;
-		AudioData GetAudioData(std::size_t samplesToRead);
-		AudioData GetAudioData(std::size_t samplesStartPosition, std::size_t samplesToRead);
+
+		std::vector<AudioData> GetAudioData();
+		std::vector<AudioData> GetAudioData(std::size_t samplesToRead);
+		std::vector<AudioData> GetAudioData(std::size_t samplesStartPosition, std::size_t samplesToRead);
 
 	private:
 		void ReadHeader();
 		void ValidateHeader();
-		void CacheAudioData();
 
 		// Returns the byte position in the file where the audio sample data starts
 		std::size_t GetBytePositionInFileWhereAudioSamplesStart();
@@ -84,17 +84,10 @@ class WaveFileReader
 		std::string filename_;
 		WaveFile::WaveFileHeader header_;
 		static const unsigned int waveHeaderSize_{sizeof(WaveFile::WaveFileHeader)};
-		double* audioData_{nullptr};
 		std::size_t sampleCount_;
-
-		bool bufferSmallFile_;
-		std::size_t maxBufferLimit_;
 
 		std::ifstream inputFileStream_;
 		void OpenFile();
-
-		// The default buffer limit is calculated as 30 seconds of 44100Hz sample rate (i.e. 30 * 44100 samples)
-		constexpr static std::size_t defaultBufferLimitInSamples_{44100 * 30};
 };
 
 } // End of namespace

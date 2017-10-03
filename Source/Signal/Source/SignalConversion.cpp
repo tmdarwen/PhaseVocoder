@@ -35,6 +35,7 @@ const int16_t MAX16{32767};
 const int16_t MIN16{-32768};
 
 constexpr double MAX16_FLOAT{32767.0};
+constexpr double MIN16_FLOAT{-32768.0};
 constexpr double MIN16_FLOAT_REVERSE_SIGN{MIN16 * -1.0};
 
 inline int16_t ConvertFloat64SampleToSigned16Sample(double sample)
@@ -62,6 +63,38 @@ inline int16_t ConvertFloat64SampleToSigned16Sample(double sample)
 		}
 	}
 }
+
+inline double ConvertSigned16SampleToFloat64(int16_t sample)
+{
+	if(sample == 0)
+	{
+		return 0.0;	
+	}
+
+	if(sample > 0)
+	{
+		if(sample < MAX16)
+		{
+			return static_cast<double>(sample) / Signal::SignalConversion::MAX16_FLOAT;
+		}
+		else
+		{
+			return 1.0;
+		}
+	}
+	else
+	{
+		if(sample > MIN16)
+		{
+			return static_cast<double>(sample) / Signal::SignalConversion::MIN16_FLOAT_REVERSE_SIGN;
+		}
+		else
+		{
+			return -1.0;
+		}
+	}
+}
+
 
 }};
 
@@ -130,4 +163,37 @@ std::vector<int16_t> Signal::ConvertAudioDataToInterleavedSigned16(const AudioDa
 	}
 
 	return returnSignal;
+}
+
+AudioData Signal::ConvertSigned16ToAudioData(const std::vector<int16_t>& interleavedSigned16)
+{
+	AudioData audioData;
+
+	std::vector<int16_t> returnSignal;
+	for(std::size_t i{0}; i < interleavedSigned16.size(); ++i)
+	{
+		audioData.PushSample(Signal::SignalConversion::ConvertSigned16SampleToFloat64(interleavedSigned16[i]));
+	}
+
+	return audioData;
+}
+
+std::vector<AudioData> Signal::ConvertInterleavedSigned16ToAudioData(const std::vector<int16_t>& interleavedSigned16)
+{
+	AudioData audioDataLeft;
+	AudioData audioDataRight;
+
+	if(interleavedSigned16.size() % 2 != 0)
+	{
+		Utilities::ThrowException("Input given is not divisible by two and therefore cannot be interleaved");
+	}
+
+	std::vector<int16_t> returnSignal;
+	for(std::size_t i{0}; i < interleavedSigned16.size();)
+	{
+		audioDataLeft.PushSample(Signal::SignalConversion::ConvertSigned16SampleToFloat64(interleavedSigned16[i++]));
+		audioDataRight.PushSample(Signal::SignalConversion::ConvertSigned16SampleToFloat64(interleavedSigned16[i++]));
+	}
+
+	return std::vector<AudioData>{audioDataLeft, audioDataRight};
 }
