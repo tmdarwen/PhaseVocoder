@@ -31,6 +31,8 @@
 #include <vector>
 #include <unordered_map>
 
+class AudioData;
+
 namespace WaveFile {
 
 class WaveFileWriter
@@ -39,7 +41,10 @@ class WaveFileWriter
 		WaveFileWriter(const std::string& filename, std::size_t channels, std::size_t sampleRate, std::size_t bitsPerSample);
 		~WaveFileWriter();
 
-		void AppendAudioData(const std::vector<double>& audioData);
+		// An AudioData object holds a "stream" of audio.  Think of a "stream" as a single channel.  In order to write multiple 
+		// channels (i.e. a stereo file) place multiple AudioData objects in the vector.  For stereo, we follow the normal 
+		// convention of index zero being the left channel and index one being the right channel.
+		void AppendAudioData(const std::vector<AudioData>& audioData);
 		std::size_t GetSampleCount();
 
 	private:

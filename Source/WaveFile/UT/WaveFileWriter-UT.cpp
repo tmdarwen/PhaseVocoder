@@ -25,36 +25,84 @@
  */
 
 #include <gtest/gtest.h>
-#include <WaveFile/WaveFileWriter.h>
+#include <WaveFile/WaveFileDefines.h>
 #include <WaveFile/WaveFileReader.h>
+#include <WaveFile/WaveFileWriter.h>
 #include <Utilities/Exception.h>
 #include <cmath>
 
-TEST(WaveWriterTest, CreateWaveFileAndVerify)
+TEST(WaveWriterTest, CreateMonoWaveFileAndVerify)
 {
 	const uint16_t channels{1};
 	const uint32_t sampleRate{44100};
 	const uint16_t bitsPerSample{16};
-	const std::vector<double> audioData{0, 0.25, 0.5, 0.75, 1.0, 0.75, 0.5, 0.25, 0, -0.25, -0.50, -0.75, -1.0, -0.75, -0.50, -0.25, 0.0};
+	const std::vector<double> rawAudioData{0, 0.25, 0.5, 0.75, 1.0, 0.75, 0.5, 0.25, 0, -0.25, -0.50, -0.75, -1.0, -0.75, -0.50, -0.25, 0.0};
+	AudioData audioData{rawAudioData};
 
+	// I scope this so that it goes out of scope (closes the file) before trying to read it
 	{
-		WaveFile::WaveFileWriter waveWriter{"TestOutputFile.wav", channels, sampleRate, bitsPerSample};
-		waveWriter.AppendAudioData(audioData);
+		WaveFile::WaveFileWriter waveWriter{"MonoTestOutputFile.wav", channels, sampleRate, bitsPerSample};
+		waveWriter.AppendAudioData(std::vector<AudioData>{audioData});
 	}
 
-	WaveFile::WaveFileReader waveReader{"TestOutputFile.wav"};
+	WaveFile::WaveFileReader waveReader{"MonoTestOutputFile.wav"};
 
 	EXPECT_EQ(bitsPerSample, waveReader.GetBitsPerSample());
 	EXPECT_EQ(sampleRate * bitsPerSample / 8, waveReader.GetByteRate());
 	EXPECT_EQ(channels, waveReader.GetChannels());
-	EXPECT_EQ(audioData.size(), waveReader.GetSampleCount());
+	EXPECT_EQ(rawAudioData.size(), waveReader.GetSampleCount());
+	EXPECT_EQ(audioData.GetSize(), waveReader.GetSampleCount());
 	EXPECT_EQ(sampleRate, waveReader.GetSampleRate());
 	EXPECT_EQ(WaveFile::WAVE_FILE_HEADER_SIZE, waveReader.GetWaveHeaderSize());
 
 	// Verify the data we wrote is the data that is in the file
-	auto readAudioData{waveReader.GetAudioData()[0].GetData()};
-	for(std::size_t i{0}; i < audioData.size(); ++i)
+	auto readAudioData{waveReader.GetAudioData()[WaveFile::MONO_CHANNEL].GetData()};
+	for(std::size_t i{0}; i < rawAudioData.size(); ++i)
 	{
-		EXPECT_NEAR(audioData[i], readAudioData[i], 0.0001);	
+		EXPECT_NEAR(rawAudioData[i], readAudioData[i], 0.0001);	
+	}
+}
+
+TEST(WaveWriterTest, CreateStereoWaveFileAndVerify)
+{
+	const uint16_t channels{2};
+	const uint32_t sampleRate{44100};
+	const uint16_t bitsPerSample{16};
+
+	// To keep the channels easily identifiable from each other I simply made them inverses of each other
+	const std::vector<double> rawAudioDataLeft{0, 0.25, 0.5, 0.75, 1.0, 0.75, 0.5, 0.25, 0, -0.25, -0.50, -0.75, -1.0, -0.75, -0.50, -0.25, 0.0};
+	const std::vector<double> rawAudioDataRight{0, -0.25, -0.5, -0.75, -1.0, -0.75, -0.5, -0.25, 0, 0.25, 0.50, 0.75, 1.0, 0.75, 0.50, 0.25, 0.0};
+
+	auto audioData = std::vector<AudioData>{AudioData(rawAudioDataLeft), AudioData(rawAudioDataRight)};
+
+	// I scope this so that it goes out of scope (closes the file) before trying to read it
+	{
+		WaveFile::WaveFileWriter waveWriter{"StereoTestOutputFile.wav", channels, sampleRate, bitsPerSample};
+		waveWriter.AppendAudioData(audioData);
+	}
+
+	WaveFile::WaveFileReader waveReader{"StereoTestOutputFile.wav"};
+
+	EXPECT_EQ(bitsPerSample, waveReader.GetBitsPerSample());
+	EXPECT_EQ(sampleRate * bitsPerSample / 8 * channels, waveReader.GetByteRate());
+	EXPECT_EQ(channels, waveReader.GetChannels());
+	EXPECT_EQ(rawAudioDataLeft.size(), waveReader.GetSampleCount());
+	EXPECT_EQ(rawAudioDataRight.size(), waveReader.GetSampleCount());
+	EXPECT_EQ(sampleRate, waveReader.GetSampleRate());
+	EXPECT_EQ(WaveFile::WAVE_FILE_HEADER_SIZE, waveReader.GetWaveHeaderSize());
+
+	// Verify the data we wrote is the data that is in the file
+	auto readAudioData{waveReader.GetAudioData()};
+	auto readAudioDataLeft{readAudioData[WaveFile::LEFT_CHANNEL].GetData()};
+	auto readAudioDataRight{readAudioData[WaveFile::RIGHT_CHANNEL].GetData()};
+
+	// Every wave file should always have the same number of samples on both channels
+	EXPECT_EQ(readAudioDataLeft.size(), readAudioDataRight.size());
+
+	// Now check the data...
+	for(std::size_t i{0}; i < rawAudioDataLeft.size(); ++i)
+	{
+		EXPECT_NEAR(rawAudioDataLeft[i], readAudioDataLeft[i], 0.0001);	
+		EXPECT_NEAR(rawAudioDataRight[i], readAudioDataRight[i], 0.0001);	
 	}
 }

@@ -147,6 +147,17 @@ std::vector<double> Signal::ConvertSigned16ToFloat64(const std::vector<int16_t>&
 	return returnSignal;
 }
 
+std::vector<int16_t> Signal::ConvertAudioDataToSigned16(const AudioData& audioData)
+{
+	std::vector<int16_t> returnSignal;
+	for(std::size_t i{0}; i < audioData.GetSize(); ++i)
+	{
+		returnSignal.push_back(Signal::SignalConversion::ConvertFloat64SampleToSigned16Sample(audioData.GetData()[i]));
+	}
+
+	return returnSignal;
+}
+
 std::vector<int16_t> Signal::ConvertAudioDataToInterleavedSigned16(const AudioData& leftChannel, const AudioData& rightChannel)
 {
 	if(leftChannel.GetSize() != rightChannel.GetSize())

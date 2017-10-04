@@ -42,7 +42,7 @@ void DoLowPassFiltering(const std::string& inputFilename, const std::string& out
 	lowPassFilter.SubmitAudioData(inputWaveFile.GetAudioData()[WaveFile::MONO_CHANNEL]);
 
 	WaveFile::WaveFileWriter waveWriter(outputFilename, inputWaveFile.GetChannels(), inputWaveFile.GetSampleRate(), inputWaveFile.GetBitsPerSample());
-	waveWriter.AppendAudioData(lowPassFilter.FlushAudioData().GetData());
+	waveWriter.AppendAudioData(std::vector<AudioData>{lowPassFilter.FlushAudioData()});
 }
 
 TEST(LowPassFilterTests, TestInvalidCutoff)

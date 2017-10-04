@@ -92,6 +92,25 @@ TEST(SignalConversionTests, ConvertFrom16BitTo64Bit)
 	}
 }
 
+TEST(SignalConversionTests, ConvertFromAudioDataTo616Bit)
+{
+	AudioData audioData({0, 0.25, 0.5, 0.75, 1.0, 1.4, -0.25, -0.5, -0.75, -1.0, -1.2});
+
+	auto outputSignal{Signal::ConvertAudioDataToSigned16(audioData)};
+
+	EXPECT_EQ(0, outputSignal[0]);
+	EXPECT_EQ(8192, outputSignal[1]);
+	EXPECT_EQ(16384, outputSignal[2]);
+	EXPECT_EQ(24575, outputSignal[3]);
+	EXPECT_EQ(32767, outputSignal[4]);
+	EXPECT_EQ(32767, outputSignal[5]);
+	EXPECT_EQ(-8192, outputSignal[6]);
+	EXPECT_EQ(-16384, outputSignal[7]);
+	EXPECT_EQ(-24576, outputSignal[8]);
+	EXPECT_EQ(-32768, outputSignal[9]);
+	EXPECT_EQ(-32768, outputSignal[10]);
+}
+
 TEST(SignalConversionTests, ConvertFrom64BitStereoTo16BitInterleaved)
 {
 	AudioData leftChannel({0, 0.25, 0.5, 0.75, 1.0, 1.4, -0.25, -0.5, -0.75, -1.0, -1.2});

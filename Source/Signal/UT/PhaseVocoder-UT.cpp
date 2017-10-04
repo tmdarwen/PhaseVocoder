@@ -42,7 +42,7 @@ void DoPhaseVocoding(const std::string& inputFilename, const std::string& output
 	phaseVocoder.SubmitAudioData(inputWaveFile.GetAudioData()[0]);
 
 	WaveFile::WaveFileWriter waveWriter(outputFilename, inputWaveFile.GetChannels(), inputWaveFile.GetSampleRate(), inputWaveFile.GetBitsPerSample());
-	waveWriter.AppendAudioData(phaseVocoder.FlushAudioData().GetData());
+	waveWriter.AppendAudioData(std::vector<AudioData>{phaseVocoder.FlushAudioData()});
 }
 
 // I'm disabng these for MSVC debug builds b/c they will take minites.  Rest assured these run for release builds as they take seconds.

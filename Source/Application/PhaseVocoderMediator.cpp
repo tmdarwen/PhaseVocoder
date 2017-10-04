@@ -100,7 +100,7 @@ void PhaseVocoderMediator::Process()
 	if(settings_.ResampleValueGiven() || settings_.PitchShiftValueGiven())
 	{
 		auto audioData{resampler_->FlushAudioData()};
-		waveWriter_->AppendAudioData(audioData.GetData());
+		waveWriter_->AppendAudioData(std::vector<AudioData>{audioData});
 	}
 
 	totalProcessingTime_ = timer.Stop();
@@ -182,7 +182,7 @@ void PhaseVocoderMediator::HandleSilenceInInput(std::size_t sampleCount)
 		AudioData silentAudioData;
 		silentAudioData.AddSilence(currentWriteAmount);
 
-		waveWriter_->AppendAudioData(silentAudioData.GetData());
+		waveWriter_->AppendAudioData(std::vector<AudioData>{silentAudioData});
 
 		currentSamplePosition += currentWriteAmount;
 	}
@@ -228,7 +228,7 @@ void PhaseVocoderMediator::ProcessInput(const AudioData& audioInputData)
 		Utilities::ThrowException("PhaseVocoderMediator has no action to perform");
 	}
 
-	waveWriter_->AppendAudioData(resultingAudio.GetData());
+	waveWriter_->AppendAudioData(std::vector<AudioData>{resultingAudio});
 }
 
 void PhaseVocoderMediator::FinalizeAudioSection(std::size_t totalInputSamples)
@@ -251,7 +251,7 @@ void PhaseVocoderMediator::FinalizeAudioSection(std::size_t totalInputSamples)
 	}
 	else
 	{
-		waveWriter_->AppendAudioData(audioData.GetData());
+		waveWriter_->AppendAudioData(std::vector<AudioData>{audioData});
 	}
 }
 

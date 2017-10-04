@@ -25,7 +25,9 @@
  */
 
 #include <WaveFile/WaveFileWriter.h>
+#include <WaveFile/WaveFileDefines.h>
 #include <WaveFile/WaveFileHeader.h>
+#include <AudioData/AudioData.h>
 #include <Utilities/Exception.h>
 #include <Signal/SignalConversion.h>
 
@@ -67,21 +69,41 @@ std::size_t WaveFile::WaveFileWriter::GetSampleCount()
 	return sampleCount_;
 }
 
-void WaveFile::WaveFileWriter::AppendAudioData(const std::vector<double>& audioData)
+void WaveFile::WaveFileWriter::AppendAudioData(const std::vector<AudioData>& audioData)
 {
 	if(audioData.size() == 0)
 	{
 		return;
 	}
 
-	auto sampleData16Bit{Signal::ConvertFloat64ToSigned16(audioData)};
- 	fileStream_.write(reinterpret_cast<const char*>(&sampleData16Bit[0]), sizeof(int16_t) * sampleData16Bit.size());
+	if(audioData.size() != channels_)
+	{
+		Utilities::Exception(Utilities::Stringify("Given audio data to WaveFileWrite is does not correspond to specified channels " + filename_));
+	}
+
+	if(channels_ == 2 && audioData[WaveFile::LEFT_CHANNEL].GetSize() != audioData[WaveFile::RIGHT_CHANNEL].GetSize())
+	{
+		Utilities::Exception(Utilities::Stringify("Given stereo audio data has differing sample sizes between channels " + filename_));
+	}
+
+	std::vector<int16_t> shortOutput;
+
+	if(channels_ == 1)
+	{
+		shortOutput = Signal::ConvertAudioDataToSigned16(audioData[WaveFile::MONO_CHANNEL]);	
+	}
+	else if(channels_ == 2)
+	{
+		shortOutput = Signal::ConvertAudioDataToInterleavedSigned16(audioData[WaveFile::LEFT_CHANNEL], audioData[WaveFile::RIGHT_CHANNEL]);	
+	}
+
+ 	fileStream_.write(reinterpret_cast<const char*>(&shortOutput[0]), sizeof(int16_t) * shortOutput.size());
 	if(!fileStream_.good())
 	{
 		Utilities::Exception(Utilities::Stringify("Failed to write audio data to file " + filename_));
 	}
 
-	sampleCount_ += sampleData16Bit.size();
+	sampleCount_ += (shortOutput.size() / channels_);
 }
 
 /*
