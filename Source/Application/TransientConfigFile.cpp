@@ -32,6 +32,14 @@
 
 TransientConfigFile::TransientConfigFile(const std::string& filename)
 {
+	ReadTransientConfigFile(filename);
+	SortTransientVectors();
+}
+
+TransientConfigFile::~TransientConfigFile() { }
+
+void TransientConfigFile::ReadTransientConfigFile(const std::string& filename)
+{
 	try
 	{
 		YAML::Node config = YAML::LoadFile(filename);
@@ -40,6 +48,19 @@ TransientConfigFile::TransientConfigFile(const std::string& filename)
 		{
 			transients_.push_back(transient.as<std::size_t>());
 		}
+
+		for(auto transient : config["left_channel_transients"])
+		{
+			leftChannelTransients_.push_back(transient.as<std::size_t>());
+		}
+		leftChannelTransients_.insert(leftChannelTransients_.begin(), transients_.begin(), transients_.end());
+
+		for(auto transient : config["right_channel_transients"])
+		{
+			rightChannelTransients_.push_back(transient.as<std::size_t>());
+		}
+		rightChannelTransients_.insert(rightChannelTransients_.begin(), transients_.begin(), transients_.end());
+
 	}
 	catch(std::exception theException)
 	{
@@ -48,9 +69,24 @@ TransientConfigFile::TransientConfigFile(const std::string& filename)
 	}
 }
 
-TransientConfigFile::~TransientConfigFile() { }
+void TransientConfigFile::SortTransientVectors()
+{
+	std::sort(transients_.begin(), transients_.end());
+	std::sort(leftChannelTransients_.begin(), leftChannelTransients_.end());
+	std::sort(rightChannelTransients_.begin(), rightChannelTransients_.end());
+}
 
 const std::vector<std::size_t>& TransientConfigFile::GetTransients() const
 {
 	return transients_;
+}
+
+const std::vector<std::size_t>& TransientConfigFile::GetLeftChannelTransients() const
+{
+	return leftChannelTransients_;
+}
+
+const std::vector<std::size_t>& TransientConfigFile::GetRightChannelTransients() const
+{
+	return rightChannelTransients_;
 }

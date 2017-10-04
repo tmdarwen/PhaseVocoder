@@ -34,7 +34,14 @@ class TransientConfigFile
 		virtual ~TransientConfigFile();
 
 		const std::vector<std::size_t>& GetTransients() const;
+		const std::vector<std::size_t>& GetLeftChannelTransients() const;
+		const std::vector<std::size_t>& GetRightChannelTransients() const;
 
 	private:
+		void ReadTransientConfigFile(const std::string& filename);
+		void SortTransientVectors();
+
 		std::vector<std::size_t> transients_;
+		std::vector<std::size_t> leftChannelTransients_;
+		std::vector<std::size_t> rightChannelTransients_;
 };

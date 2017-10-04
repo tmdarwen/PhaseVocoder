@@ -41,7 +41,7 @@ TEST(TransientConfigFile, TestIllFormattedFile)
 
 TEST(TransientConfigFile, TestGettingTransients)
 {
-	TransientConfigFile transientConfigFile("CorrectTransientConfigFile.yaml");
+	TransientConfigFile transientConfigFile("TransientConfigFile.yaml");
 	auto transients{transientConfigFile.GetTransients()};
 
 	EXPECT_EQ(5, transients.size());
@@ -52,5 +52,39 @@ TEST(TransientConfigFile, TestGettingTransients)
 		EXPECT_EQ(300, transients[2]);
 		EXPECT_EQ(400, transients[3]);
 		EXPECT_EQ(500, transients[4]);
+	}
+}
+
+TEST(TransientConfigFile, TestGettingChannelSpecificTransients)
+{
+	TransientConfigFile transientConfigFile("ChannelSpecificTransientConfigFile.yaml");
+
+	auto leftChannelTransients{transientConfigFile.GetLeftChannelTransients()};
+
+	EXPECT_EQ(8, leftChannelTransients.size());
+	if(leftChannelTransients.size() == 8)
+	{
+		EXPECT_EQ(100, leftChannelTransients[0]);
+		EXPECT_EQ(200, leftChannelTransients[1]);
+		EXPECT_EQ(275, leftChannelTransients[2]);
+		EXPECT_EQ(300, leftChannelTransients[3]);
+		EXPECT_EQ(400, leftChannelTransients[4]);
+		EXPECT_EQ(445, leftChannelTransients[5]);
+		EXPECT_EQ(500, leftChannelTransients[6]);
+		EXPECT_EQ(550, leftChannelTransients[7]);
+	}
+
+	auto rightChannelTransients{transientConfigFile.GetRightChannelTransients()};
+
+	EXPECT_EQ(7, rightChannelTransients.size());
+	if(rightChannelTransients.size() == 7)
+	{
+		EXPECT_EQ(100, rightChannelTransients[0]);
+		EXPECT_EQ(150, rightChannelTransients[1]);
+		EXPECT_EQ(200, rightChannelTransients[2]);
+		EXPECT_EQ(300, rightChannelTransients[3]);
+		EXPECT_EQ(340, rightChannelTransients[4]);
+		EXPECT_EQ(400, rightChannelTransients[5]);
+		EXPECT_EQ(500, rightChannelTransients[6]);
 	}
 }
