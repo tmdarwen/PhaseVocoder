@@ -30,23 +30,9 @@
 #include <algorithm>
 
 ThreadSafeAudioFile::Writer::Writer(const std::string& filename, std::size_t channels, std::size_t sampleRate, std::size_t bitsPerSample) :
-	filename_{filename},
-	channels_{channels},
-	sampleRate_{sampleRate},
-	bitsPerSample_{bitsPerSample},
 	waveFileWriter_{filename, channels, sampleRate, bitsPerSample}
 {
-	if(channels != 1 && channels != 2)
-	{
-		Utilities::ThrowException("Attempting to instantiate ThreadSafeAudioFile Writer with non-standard channels: " + channels);
-	}
-
-	if(bitsPerSample != 16)
-	{
-		Utilities::ThrowException("Attempting to instantiate ThreadSafeAudioFile Writer with non-standard bit resolution: " + bitsPerSample);
-	}
-
-	if(channels_ == 2)
+	if(waveFileWriter_.GetChannels() == 2)
 	{
 		audioDataBuffers_.push_back(AudioData{});		
 		audioDataBuffers_.push_back(AudioData{});		
@@ -59,7 +45,7 @@ void ThreadSafeAudioFile::Writer::WriteAudioStream(std::size_t streamID, const A
 {
 	std::lock_guard<std::mutex> lock{mutex_};
 
-	if(channels_ == 1)
+	if(waveFileWriter_.GetChannels() == 1)
 	{
 		waveFileWriter_.AppendAudioData(std::vector<AudioData>{audioData});
 	}
@@ -88,7 +74,7 @@ void ThreadSafeAudioFile::Writer::WriteAudioStream(std::size_t streamID, const A
 		{
 			auto samplesToWrite{std::min(audioData.GetSize(), audioDataBuffers_[oppositeStreamID].GetSize())};
 
-			std::vector<AudioData> dataToWrite(channels_);
+			std::vector<AudioData> dataToWrite(waveFileWriter_.GetChannels());
 			dataToWrite[streamID].Append(audioData.Retrieve(samplesToWrite));
 			dataToWrite[oppositeStreamID].Append(audioDataBuffers_[oppositeStreamID].RetrieveRemove(samplesToWrite));
 

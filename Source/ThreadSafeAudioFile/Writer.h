@@ -43,10 +43,6 @@ class Writer
 		void WriteAudioStream(std::size_t streamID, const AudioData& audioData);
 
 	private:
-		std::string filename_;
-		std::size_t channels_;
-		std::size_t sampleRate_;
-		std::size_t bitsPerSample_;
 		WaveFile::WaveFileWriter waveFileWriter_;
 		std::mutex mutex_;
 		std::vector<AudioData> audioDataBuffers_;

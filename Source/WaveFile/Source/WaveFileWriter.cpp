@@ -34,10 +34,14 @@
 WaveFile::WaveFileWriter::WaveFileWriter(const std::string& filename, std::size_t channels, std::size_t sampleRate, std::size_t bitsPerSample) :
 	filename_{filename}, channels_{channels}, sampleRate_{sampleRate}, bitsPerSample_{bitsPerSample}, sampleCount_{0}
 {
-	if(channels_ != 1 || bitsPerSample_ != 16)
+	if(channels_ != 1 && channels_ != 2)
 	{
-		Utilities::Exception(Utilities::Stringify("Failed to write wave file ") + Utilities::Stringify(filename_) 
-			+ Utilities::Stringify(" currently only support writing mono 16 bit wave files"));
+		Utilities::ThrowException("Attempting to instantiate WaveFileWriter with non-standard channels: " + channels);
+	}
+
+	if(bitsPerSample_ != 16)
+	{
+		Utilities::ThrowException("Attempting to instantiate WaveFileWriter Writer with non-standard bit resolution: " + bitsPerSample);
 	}
 
 	fileStream_.open(filename_, std::ios::out | std::ios::binary);
@@ -62,6 +66,26 @@ WaveFile::WaveFileWriter::~WaveFileWriter()
 	WriteWaveFileHeader();
 
 	fileStream_.close();
+}
+
+const std::string& WaveFile::WaveFileWriter::GetFilename()
+{
+	return filename_;
+}
+
+std::size_t WaveFile::WaveFileWriter::GetChannels()
+{
+	return channels_;
+}
+
+std::size_t WaveFile::WaveFileWriter::GetSampleRate()
+{
+	return sampleRate_;
+}
+
+std::size_t WaveFile::WaveFileWriter::GetBitsPerSample()
+{
+	return bitsPerSample_;
 }
 
 std::size_t WaveFile::WaveFileWriter::GetSampleCount()

@@ -31,6 +31,16 @@
 #include <Utilities/Exception.h>
 #include <cmath>
 
+TEST(WaveWriterTest, TestInvalidChannels)
+{
+	ASSERT_THROW(WaveFile::WaveFileWriter("TestFile.wav", 3, 44100, 16), Utilities::Exception);
+}
+
+TEST(WaveWriterTest, TestInvalidBitResolution)
+{
+	ASSERT_THROW(WaveFile::WaveFileWriter("TestFile.wav", 1, 44100, 8), Utilities::Exception);
+}
+
 TEST(WaveWriterTest, CreateMonoWaveFileAndVerify)
 {
 	const uint16_t channels{1};
@@ -43,6 +53,10 @@ TEST(WaveWriterTest, CreateMonoWaveFileAndVerify)
 	{
 		WaveFile::WaveFileWriter waveWriter{"MonoTestOutputFile.wav", channels, sampleRate, bitsPerSample};
 		waveWriter.AppendAudioData(std::vector<AudioData>{audioData});
+		EXPECT_EQ("MonoTestOutputFile.wav", waveWriter.GetFilename());
+		EXPECT_EQ(channels, waveWriter.GetChannels());
+		EXPECT_EQ(sampleRate, waveWriter.GetSampleRate());
+		EXPECT_EQ(bitsPerSample, waveWriter.GetBitsPerSample());
 	}
 
 	WaveFile::WaveFileReader waveReader{"MonoTestOutputFile.wav"};
@@ -79,6 +93,10 @@ TEST(WaveWriterTest, CreateStereoWaveFileAndVerify)
 	{
 		WaveFile::WaveFileWriter waveWriter{"StereoTestOutputFile.wav", channels, sampleRate, bitsPerSample};
 		waveWriter.AppendAudioData(audioData);
+		EXPECT_EQ("StereoTestOutputFile.wav", waveWriter.GetFilename());
+		EXPECT_EQ(channels, waveWriter.GetChannels());
+		EXPECT_EQ(sampleRate, waveWriter.GetSampleRate());
+		EXPECT_EQ(bitsPerSample, waveWriter.GetBitsPerSample());
 	}
 
 	WaveFile::WaveFileReader waveReader{"StereoTestOutputFile.wav"};

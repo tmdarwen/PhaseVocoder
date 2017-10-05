@@ -47,6 +47,11 @@ class WaveFileWriter
 		void AppendAudioData(const std::vector<AudioData>& audioData);
 		std::size_t GetSampleCount();
 
+		const std::string& GetFilename();
+		std::size_t GetChannels();
+		std::size_t GetSampleRate();
+		std::size_t GetBitsPerSample();
+
 	private:
 		void WriteWaveFileHeader();
 
