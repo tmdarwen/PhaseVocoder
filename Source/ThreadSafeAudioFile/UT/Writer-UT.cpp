@@ -26,6 +26,7 @@
 
 #include <gtest/gtest.h>
 #include <ThreadSafeAudioFile/Writer.h>
+#include <ThreadSafeAudioFile/UT/AudioFileDataHelper.h>
 #include <AudioData/AudioData.h>
 #include <WaveFile/WaveFileReader.h>
 #include <Utilities/Exception.h>
@@ -35,29 +36,6 @@ const std::size_t MonoAudio = 1;
 const std::size_t StereoAudio = 2;
 const std::size_t SampleRate = 44100;
 const std::size_t BitResolution = 16;
-
-// Creates a simple 100 sample sawtooth audio waveform
-AudioData CreateAudioData(std::size_t samples, bool invert=false)
-{
-	AudioData audioData;
-	double inversionFactor{1.0};
-	if(invert)
-	{
-		inversionFactor = -1.0;	
-	}
-
-	for(std::size_t i{0}; i < samples; ++i)
-	{
-		audioData.PushSample(static_cast<double>(i % 100) / (100.0 * inversionFactor));	
-	}
-
-	return audioData;
-}
-
-AudioData CreateInvertedAudioData(std::size_t samples)
-{
-	return CreateAudioData(samples, true);
-}
 
 TEST(ThreadSafeAudioFileWriter, TestInvalidChannels)
 {
