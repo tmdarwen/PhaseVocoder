@@ -48,6 +48,11 @@ std::size_t ThreadSafeAudioFile::Reader::GetBitsPerSample()
 	return waveFileReader_.GetBitsPerSample();
 }
 
+std::size_t ThreadSafeAudioFile::Reader::GetSampleCount()
+{
+	return waveFileReader_.GetSampleCount();
+}
+
 AudioData ThreadSafeAudioFile::Reader::ReadAudioStream(std::size_t streamID, std::size_t sampleStartPosition, std::size_t samplesToRead)
 {
 	std::lock_guard<std::mutex> lock{mutex_};

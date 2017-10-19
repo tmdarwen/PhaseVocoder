@@ -4,6 +4,8 @@ include_directories("${PROJECT_SOURCE_DIR}/Externals/yaml-cpp/include")
 file(GLOB source_files [^.]*.h [^.]*.cpp 
 	../PhaseVocoderMediator.h 
 	../PhaseVocoderMediator.cpp 
+	../PhaseVocoderProcessor.h 
+	../PhaseVocoderProcessor.cpp 
 	../PhaseVocoderSettings.h 
 	../PhaseVocoderSettings.cpp 
 	../CommandLineArguments.h 
@@ -16,7 +18,7 @@ file(GLOB source_files [^.]*.h [^.]*.cpp
 #link_directories("${CMAKE_BINARY_DIR}/yamlcpp-build/Debug")
 add_executable(PhaseVocoderApp-UT ${source_files})
 #target_link_libraries(PhaseVocoderApp-UT gtest libyaml-cppmtd AudioData Signal Utilities WaveFile)
-target_link_libraries(PhaseVocoderApp-UT gtest yaml-cpp AudioData Signal Utilities WaveFile)
+target_link_libraries(PhaseVocoderApp-UT gtest yaml-cpp AudioData Signal ThreadSafeAudioFile Utilities WaveFile)
 
 file(GLOB WAV_TEST_FILES ${CMAKE_CURRENT_SOURCE_DIR}/TestAudio/*.wav)
 file(COPY ${WAV_TEST_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

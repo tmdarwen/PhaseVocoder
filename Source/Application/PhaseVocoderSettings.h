@@ -24,6 +24,8 @@
  * THE SOFTWARE.
  */
 
+#pragma once
+
 #include <string>
 #include <memory>
 #include <functional>
@@ -38,7 +40,7 @@ class PhaseVocoderSettings
 		void SetResampleValue(std::size_t resampleValue);
 		void SetPitchShiftValue(double pitchShiftValue);
 		void SetTransientConfigFilename(const std::string& transientConfgFilename);
-		void SetTransientCallback(std::function<void(std::size_t)> callback);
+		void SetDisplayTransients();
 		void SetValleyToPeakRatio(double valleyToPeakRatio);
 
 		// Methods to check if a value was actually given
@@ -48,7 +50,7 @@ class PhaseVocoderSettings
 		bool ResampleValueGiven() const;
 		bool PitchShiftValueGiven() const;
 		bool TransientConfigFilenameGiven() const;
-		bool TransientCallbackGiven() const;
+		bool DisplayTransients() const;
 		bool ValleyToPeakRatioGiven() const;
 
 		// Typical getter methods
@@ -58,7 +60,6 @@ class PhaseVocoderSettings
 		std::size_t GetResampleValue() const;
 		double GetPitchShiftValue() const;
 		const std::string& GetTransientConfigFilename() const;
-		std::function<void(std::size_t)> GetTransientCallback() const;
 		double GetValleyToPeakRatio() const;
 
 	private:
@@ -77,8 +78,7 @@ class PhaseVocoderSettings
 		double pitchShiftValue_;
 		bool pitchShiftValueGiven_{false};
 
-		std::function<void(std::size_t)> transientCallback_;
-		bool transientCallbackGiven_{false};
+		bool displayTransients_{false};
 
 		std::string transientConfigFilename_;
 		bool transientConfigFilenameGiven_{false};

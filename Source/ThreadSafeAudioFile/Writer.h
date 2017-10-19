@@ -42,10 +42,14 @@ class Writer
 
 		void WriteAudioStream(std::size_t streamID, const AudioData& audioData);
 
+		std::size_t GetMaxBufferedSamples();  // High water mark for stereo data buffered
+
 	private:
 		WaveFile::WaveFileWriter waveFileWriter_;
 		std::mutex mutex_;
 		std::vector<AudioData> audioDataBuffers_;
+
+		std::size_t maxBufferedSamples_{0};
 };
 
 }

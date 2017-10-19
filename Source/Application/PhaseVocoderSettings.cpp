@@ -62,10 +62,9 @@ void PhaseVocoderSettings::SetValleyToPeakRatio(double valleyToPeakRatio)
 	valleyToPeakRatioGiven_ = true;
 }
 
-void PhaseVocoderSettings::SetTransientCallback(std::function<void(std::size_t)> callback)
+void PhaseVocoderSettings::SetDisplayTransients()
 {
-	transientCallback_ = callback;
-	transientCallbackGiven_ = true;
+	displayTransients_ = true;
 }
 
 void PhaseVocoderSettings::SetTransientConfigFilename(const std::string& transientConfgFilename)
@@ -109,9 +108,9 @@ bool PhaseVocoderSettings::TransientConfigFilenameGiven() const
 	return transientConfigFilenameGiven_;
 }
 
-bool PhaseVocoderSettings::TransientCallbackGiven() const
+bool PhaseVocoderSettings::DisplayTransients() const
 {
-	return transientCallbackGiven_;
+	return displayTransients_;
 }
 
 const std::string& PhaseVocoderSettings::GetInputWaveFile() const
@@ -142,11 +141,6 @@ double PhaseVocoderSettings::GetPitchShiftValue() const
 const std::string& PhaseVocoderSettings::GetTransientConfigFilename() const
 {
 	return transientConfigFilename_;
-}
-
-std::function<void(std::size_t)> PhaseVocoderSettings::GetTransientCallback() const
-{
-	return transientCallback_;
 }
 
 double PhaseVocoderSettings::GetValleyToPeakRatio() const

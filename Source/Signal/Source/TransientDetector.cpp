@@ -112,10 +112,11 @@ bool Signal::TransientDetector::CheckForEnoughAudioToProcess()
 // Check if the input is silent as there is no sense in looking for peaks in silence
 bool Signal::TransientDetector::CheckForAllSilence()
 {
-	std::size_t sampleCount{audioDataInput_.GetSize() - GetLookAheadSampleCount()};
+	const std::vector<double>& audioData{audioDataInput_.GetData()};
+	std::size_t sampleCount{audioData.size() - GetLookAheadSampleCount()};
 	for(std::size_t i{0}; i < sampleCount; ++i)
 	{
-		if(audioDataInput_.GetData()[i] > 0.0)
+		if(audioData[i] > 0.0)
 		{
 			return false;	
 		}
@@ -229,7 +230,7 @@ std::size_t Signal::TransientDetector::GetLookAheadSampleCount()
 
 double Signal::TransientDetector::GetMaxSample(const AudioData& audioData, std::size_t sampleCount)
 {
-	auto sampleBuffer{audioData.GetData()};
+	const std::vector<double>& sampleBuffer{audioData.GetData()};
 
 	double maxSample{0.0};
 

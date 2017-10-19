@@ -58,6 +58,7 @@ TEST(ThreadSafeAudioFileReader, TestReadingMonoFile)
 	EXPECT_EQ(MonoAudio, reader.GetChannels());
 	EXPECT_EQ(SampleRate, reader.GetSampleRate());
 	EXPECT_EQ(BitResolution, reader.GetBitsPerSample());
+	EXPECT_EQ(44100, reader.GetSampleCount());
 	auto readAudioData{reader.ReadAudioStream(0, 0, 44100)};
 
 	for(std::size_t i{0}; i < 44100; ++i)
@@ -90,6 +91,7 @@ TEST(ThreadSafeAudioFileReader, TestReadingStereoFile)
 	EXPECT_EQ(StereoAudio, reader.GetChannels());
 	EXPECT_EQ(SampleRate, reader.GetSampleRate());
 	EXPECT_EQ(BitResolution, reader.GetBitsPerSample());
+	EXPECT_EQ(44100, reader.GetSampleCount());
 	auto readAudioDataLeft{reader.ReadAudioStream(0, 0, 44100)};
 	auto readAudioDataRight{reader.ReadAudioStream(1, 0, 44100)};
 
@@ -111,8 +113,8 @@ TEST(ThreadSafeAudioFileReader, TestReadingStereoFile)
 
 TEST(ThreadSafeAudioFileReader, TestReadingStereoFileThreaded)
 {
-	AudioData audioData{CreateAudioData(441000)};	
-	AudioData audioDataInverted{CreateInvertedAudioData(441000)};	
+	AudioData audioData{CreateAudioData(44100)};	
+	AudioData audioDataInverted{CreateInvertedAudioData(44100)};	
 
 	// Scoping the following so TestFile is closed when our writer is destroyed and we don't 
 	// attempt to read the file where it might have zero size due to buffering.
@@ -125,6 +127,7 @@ TEST(ThreadSafeAudioFileReader, TestReadingStereoFileThreaded)
 	EXPECT_EQ(StereoAudio, reader.GetChannels());
 	EXPECT_EQ(SampleRate, reader.GetSampleRate());
 	EXPECT_EQ(BitResolution, reader.GetBitsPerSample());
+	EXPECT_EQ(44100, reader.GetSampleCount());
 	AudioData leftChannelRead;
 	AudioData rightChannelRead;
 

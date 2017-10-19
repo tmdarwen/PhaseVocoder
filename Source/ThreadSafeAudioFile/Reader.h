@@ -42,6 +42,7 @@ class Reader
 		std::size_t GetChannels();
 		std::size_t GetSampleRate();
 		std::size_t GetBitsPerSample();
+		std::size_t GetSampleCount();
 
 		AudioData ReadAudioStream(std::size_t streamID, std::size_t sampleStartPosition, std::size_t samplesToRead);
 

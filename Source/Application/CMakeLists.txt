@@ -15,7 +15,7 @@ endif(BUILD_NUMBER)
 file(GLOB source_files [^.]*.h [^.]*.cpp)
 include_directories("${PROJECT_SOURCE_DIR}" "${CMAKE_BINARY_DIR}/yamlcpp-src/include")
 add_executable(PhaseVocoder ${source_files})
-target_link_libraries(PhaseVocoder AudioData Signal Utilities WaveFile yaml-cpp)
+target_link_libraries(PhaseVocoder AudioData Signal ThreadSafeAudioFile Utilities WaveFile yaml-cpp)
 set_target_properties(PhaseVocoder PROPERTIES FOLDER Apps)
 
 add_subdirectory(UT)

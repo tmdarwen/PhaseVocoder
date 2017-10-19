@@ -18,7 +18,6 @@ For information on how the PhaseVocoder works, please see [this PDF document](Do
 -   Building this project requires a C++14 compliant compiler.  This project is routinely built in my continous integration system which uses MS Visual Studio 2017, GCC 5.3.1 and Apple LLVM version 7.3.0 (clang 703.0.31).
 
 -   External dependencies are [GoogleTest](https://github.com/google/googletest) and [yaml-cpp](https://github.com/jbeder/yaml-cpp).  You do *not* need to clone or install these dependencies manually. The GitHub repos will be cloned automatically when CMake runs.
-
  
 
 **Steps for Building**

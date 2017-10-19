@@ -85,5 +85,12 @@ void ThreadSafeAudioFile::Writer::WriteAudioStream(std::size_t streamID, const A
 				audioDataBuffers_[streamID].Append(audioData.Retrieve(samplesToWrite, audioData.GetSize() - samplesToWrite));
 			}
 		}
+
+		maxBufferedSamples_ = std::max(std::max(audioDataBuffers_[0].GetSize(), audioDataBuffers_[1].GetSize()), maxBufferedSamples_);
 	}
+}
+
+std::size_t ThreadSafeAudioFile::Writer::GetMaxBufferedSamples()
+{
+	return maxBufferedSamples_;
 }
