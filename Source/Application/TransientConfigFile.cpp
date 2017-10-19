@@ -29,6 +29,7 @@
 #include <Utilities/Stringify.h>
 #include <yaml-cpp/yaml.h>
 #include <cstddef>
+#include <algorithm>
 
 TransientConfigFile::TransientConfigFile(const std::string& filename)
 {
