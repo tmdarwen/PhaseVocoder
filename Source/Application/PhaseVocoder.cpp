@@ -26,8 +26,7 @@
 
 #include <iostream>
 #include <string>
-#include <WaveFile/WaveFileReader.h>
-#include <WaveFile/WaveFileWriter.h>
+#include <algorithm>
 #include <Utilities/Exception.h>
 #include <Application/PhaseVocoderMediator.h>
 #include <Application/CommandLineArguments.h>
@@ -65,11 +64,6 @@ void CheckCommandLineArguments(CommandLineArguments& commandLineArguments)
 	}
 }
 
-void TransientCallback(std::size_t transient)
-{
-	std::cout << "Transient at sample position: " << transient << std::endl;
-}
-
 std::unique_ptr<PhaseVocoderMediator> GetPhaseVocoderMediator(const CommandLineArguments& commandLineArguments)
 {
 	PhaseVocoderSettings phaseVocoderSettings;
@@ -99,11 +93,6 @@ std::unique_ptr<PhaseVocoderMediator> GetPhaseVocoderMediator(const CommandLineA
 		phaseVocoderSettings.SetPitchShiftValue(commandLineArguments.GetPitchSetting());
 	}
 
-	if(commandLineArguments.ShowTransients())
-	{
-		phaseVocoderSettings.SetTransientCallback(TransientCallback);
-	}
-
 	if(commandLineArguments.TransientConfigFileGiven())
 	{
 		phaseVocoderSettings.SetTransientConfigFilename(commandLineArguments.GetTransientConfigFilename());
@@ -117,6 +106,49 @@ std::unique_ptr<PhaseVocoderMediator> GetPhaseVocoderMediator(const CommandLineA
 	return std::unique_ptr<PhaseVocoderMediator>{new PhaseVocoderMediator(phaseVocoderSettings)};
 }
 
+void DisplayTransients(const std::unique_ptr<PhaseVocoderMediator>& phaseVocoderMediator)
+{
+	auto printSamplePosition{[](const std::size_t& samplePosition) { std::cout << " " << samplePosition; }};
+
+	if(phaseVocoderMediator->GetChannelCount() == 1)
+	{
+		auto transients{phaseVocoderMediator->GetTransients(0)};
+
+		if(transients.size() == 0)
+		{
+			std::cout << "No transients found" << std::endl;	
+		}
+		else
+		{
+			std::cout << "Transient sample positions:";
+			std::for_each(transients.begin(), transients.end(), printSamplePosition);
+		}
+	}
+	else if(phaseVocoderMediator->GetChannelCount() == 2)
+	{
+		auto leftTransients{phaseVocoderMediator->GetTransients(0)};
+		auto rightTransients{phaseVocoderMediator->GetTransients(1)};
+
+		if(leftTransients.size() == 0 && rightTransients.size() == 0)
+		{
+			std::cout << "No transients found" << std::endl;	
+		}
+
+		if(leftTransients.size())
+		{
+			std::cout << "Left channel transient sample positions:";
+			std::for_each(leftTransients.begin(), leftTransients.end(), printSamplePosition);
+			std::cout << std::endl;
+		}
+
+		if(rightTransients.size())
+		{
+			std::cout << "Right channel transient sample positions:";
+			std::for_each(rightTransients.begin(), rightTransients.end(), printSamplePosition);
+		}
+	}
+}
+
 int PerformPhaseVocoding(CommandLineArguments& commandLineArguments)
 {
 	try
@@ -125,9 +157,17 @@ int PerformPhaseVocoding(CommandLineArguments& commandLineArguments)
 		phaseVocoderMediator->Process();
 
 		std::cout << "Total Processing Time: " << phaseVocoderMediator->GetTotalProcessingTime() << std::endl;
-		std::cout << "Transient Processing Time: " << phaseVocoderMediator->GetTransientProcessingTime() << std::endl;
-		std::cout << "PhaseVocoder Processing Time: " << phaseVocoderMediator->GetPhaseVocoderProcessingTime() << std::endl;
-		std::cout << "Resampler Processing Time: " << phaseVocoderMediator->GetResamplerProcessingTime() << std::endl;
+		if(phaseVocoderMediator->GetChannelCount() == 2)
+		{
+			std::cout << "Write Buffer Highwater Mark: " << phaseVocoderMediator->GetMaxBufferedSamples() << std::endl;
+		}
+
+		if(commandLineArguments.ShowTransients())
+		{
+			DisplayTransients(phaseVocoderMediator);
+		}
+		
+		std::cout << std::endl;  // Newline so prompt displays below output
 	}
 	catch(Utilities::Exception& exception)
 	{

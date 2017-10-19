@@ -68,18 +68,15 @@ void PitchShift(const std::string& inputFile, const std::string& outputFile, dou
 
 std::vector<std::size_t> SpecificValleyToPeakRatio(const std::string& inputFile, double valleyToPeakRatio)
 {
-	std::vector<std::size_t> transientPositions;
-	auto transientCallback{[&](std::size_t transient) { transientPositions.push_back(transient); }};
-
 	PhaseVocoderSettings phaseVocoderSettings;
 	phaseVocoderSettings.SetInputWaveFile(inputFile);
 	phaseVocoderSettings.SetValleyToPeakRatio(valleyToPeakRatio);
-	phaseVocoderSettings.SetTransientCallback(transientCallback);
+	phaseVocoderSettings.SetDisplayTransients();
 
 	PhaseVocoderMediator phaseVocoderMediator(phaseVocoderSettings);
 	phaseVocoderMediator.Process();
 
-	return transientPositions;
+	return phaseVocoderMediator.GetTransients(0);
 }
 
 // I'm disabling these for MSVC debug builds b/c they will take minites.  It's the FFT that appears to be really slow in the debug build.  
@@ -171,15 +168,14 @@ TEST(PhaseVocoderMediator, PitchShift3)
 
 TEST(TransientDetectorTests, DefaultValleyToPeakRatio)
 {
-	std::vector<std::size_t> transientPositions;
-	auto transientCallback{[&](std::size_t transient) { transientPositions.push_back(transient); }};
-
 	PhaseVocoderSettings phaseVocoderSettings;
 	phaseVocoderSettings.SetInputWaveFile("SweetEmotion.wav");
-	phaseVocoderSettings.SetTransientCallback(transientCallback);
+	phaseVocoderSettings.SetDisplayTransients();
 
 	PhaseVocoderMediator phaseVocoderMediator(phaseVocoderSettings);
 	phaseVocoderMediator.Process();
+
+	auto transientPositions{phaseVocoderMediator.GetTransients(0)};
 
 	EXPECT_EQ(8, transientPositions.size());
 	if(transientPositions.size() == 8)

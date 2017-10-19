@@ -27,6 +27,7 @@
 #include <gtest/gtest.h>
 #include <Signal/TransientDetector.h>
 #include <AudioData/AudioData.h>
+#include <WaveFile/WaveFileDefines.h>
 #include <WaveFile/WaveFileReader.h>
 
 std::vector<std::size_t> GetTransientPositions(const std::string& waveFilename, double secondaryLevelThreshold=0.0)
@@ -42,7 +43,7 @@ std::vector<std::size_t> GetTransientPositions(const std::string& waveFilename, 
 
 	std::vector<std::size_t> transients;
 
-	transientDetector.FindTransients(AudioData(inputWaveFile.GetAudioData(), inputWaveFile.GetSampleCount()), transients);
+	transientDetector.FindTransients(inputWaveFile.GetAudioData()[WaveFile::MONO_CHANNEL], transients);
 
 	return transients;
 }

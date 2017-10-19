@@ -63,6 +63,38 @@ inline int16_t ConvertFloat64SampleToSigned16Sample(double sample)
 	}
 }
 
+inline double ConvertSigned16SampleToFloat64(int16_t sample)
+{
+	if(sample == 0)
+	{
+		return 0.0;	
+	}
+
+	if(sample > 0)
+	{
+		if(sample < MAX16)
+		{
+			return static_cast<double>(sample) / Signal::SignalConversion::MAX16_FLOAT;
+		}
+		else
+		{
+			return 1.0;
+		}
+	}
+	else
+	{
+		if(sample > MIN16)
+		{
+			return static_cast<double>(sample) / Signal::SignalConversion::MIN16_FLOAT_REVERSE_SIGN;
+		}
+		else
+		{
+			return -1.0;
+		}
+	}
+}
+
+
 }};
 
 std::vector<int16_t> Signal::ConvertFloat64ToSigned16(const std::vector<double>& inputSignal)
@@ -114,6 +146,17 @@ std::vector<double> Signal::ConvertSigned16ToFloat64(const std::vector<int16_t>&
 	return returnSignal;
 }
 
+std::vector<int16_t> Signal::ConvertAudioDataToSigned16(const AudioData& audioData)
+{
+	std::vector<int16_t> returnSignal;
+	for(std::size_t i{0}; i < audioData.GetSize(); ++i)
+	{
+		returnSignal.push_back(Signal::SignalConversion::ConvertFloat64SampleToSigned16Sample(audioData.GetData()[i]));
+	}
+
+	return returnSignal;
+}
+
 std::vector<int16_t> Signal::ConvertAudioDataToInterleavedSigned16(const AudioData& leftChannel, const AudioData& rightChannel)
 {
 	if(leftChannel.GetSize() != rightChannel.GetSize())
@@ -130,4 +173,37 @@ std::vector<int16_t> Signal::ConvertAudioDataToInterleavedSigned16(const AudioDa
 	}
 
 	return returnSignal;
+}
+
+AudioData Signal::ConvertSigned16ToAudioData(const std::vector<int16_t>& interleavedSigned16)
+{
+	AudioData audioData;
+
+	std::vector<int16_t> returnSignal;
+	for(std::size_t i{0}; i < interleavedSigned16.size(); ++i)
+	{
+		audioData.PushSample(Signal::SignalConversion::ConvertSigned16SampleToFloat64(interleavedSigned16[i]));
+	}
+
+	return audioData;
+}
+
+std::vector<AudioData> Signal::ConvertInterleavedSigned16ToAudioData(const std::vector<int16_t>& interleavedSigned16)
+{
+	AudioData audioDataLeft;
+	AudioData audioDataRight;
+
+	if(interleavedSigned16.size() % 2 != 0)
+	{
+		Utilities::ThrowException("Input given is not divisible by two and therefore cannot be interleaved");
+	}
+
+	std::vector<int16_t> returnSignal;
+	for(std::size_t i{0}; i < interleavedSigned16.size();)
+	{
+		audioDataLeft.PushSample(Signal::SignalConversion::ConvertSigned16SampleToFloat64(interleavedSigned16[i++]));
+		audioDataRight.PushSample(Signal::SignalConversion::ConvertSigned16SampleToFloat64(interleavedSigned16[i++]));
+	}
+
+	return std::vector<AudioData>{audioDataLeft, audioDataRight};
 }

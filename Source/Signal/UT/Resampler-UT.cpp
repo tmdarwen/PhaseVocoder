@@ -39,10 +39,10 @@ void DoResampling(const std::string& inputFilename, const std::string& outputFil
 
 	Signal::Resampler resampler{inputWaveFile.GetSampleRate(), resampleRatio};
 
-	resampler.SubmitAudioData(AudioData(inputWaveFile.GetAudioData(), inputWaveFile.GetSampleCount()));
+	resampler.SubmitAudioData(inputWaveFile.GetAudioData()[0]);
 
 	WaveFile::WaveFileWriter waveWriter(outputFilename, inputWaveFile.GetChannels(), newSampleRate, inputWaveFile.GetBitsPerSample());
-	waveWriter.AppendAudioData(resampler.FlushAudioData().GetData());
+	waveWriter.AppendAudioData(std::vector<AudioData>{resampler.FlushAudioData()});
 }
 
 TEST(ResamplerTests, SineWaveResampled)

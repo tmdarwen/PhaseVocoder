@@ -27,30 +27,28 @@
 #include <Application/Transients.h>
 #include <Application/TransientConfigFile.h>
 #include <Signal/TransientDetector.h>
-#include <WaveFile/WaveFileReader.h>
 #include <Utilities/Exception.h>
 #include <Utilities/Stringify.h>
+#include <ThreadSafeAudioFile/Reader.h>
 #include <yaml-cpp/yaml.h>
 #include <algorithm>
 
 //////////////////////////////////////////////////////////////////////////
 // This first group of methods are TransientSettings
 
-void TransientSettings::SetInputWaveFile(const std::string& filename)
+void TransientSettings::SetStreamID(std::size_t streamID)
 {
-	inputWaveFilename_ = filename;
-	inputWaveFilenameGiven_ = true;
+	streamID_ = streamID;
+}
+
+void TransientSettings::SetAudioFile(std::shared_ptr<ThreadSafeAudioFile::Reader> audioFile)
+{
+	audioFile_ = audioFile;
 }
 
 void TransientSettings::SetTransientValleyToPeakRatio(double valleyToPeakRatio)
 {
 	valleyToPeakRatio_ = valleyToPeakRatio;	
-}
-
-void TransientSettings::SetTransientCallback(std::function<void(std::size_t)> callback)
-{
-	transientCallback_ = callback;
-	transientCallbackGiven_ = true;
 }
 
 void TransientSettings::SetTransientConfigFilename(const std::string& transientConfgFilename)
@@ -59,9 +57,9 @@ void TransientSettings::SetTransientConfigFilename(const std::string& transientC
 	transientConfigFilenameGiven_ = true;
 }
 
-bool TransientSettings::InputWaveFileGiven() const
+std::size_t TransientSettings::GetStreamID() const
 {
-	return inputWaveFilenameGiven_;
+	return streamID_;
 }
 
 bool TransientSettings::TransientConfigFilenameGiven() const
@@ -69,24 +67,14 @@ bool TransientSettings::TransientConfigFilenameGiven() const
 	return transientConfigFilenameGiven_;
 }
 
-bool TransientSettings::TransientCallbackGiven() const
+std::shared_ptr<ThreadSafeAudioFile::Reader> TransientSettings::GetAudioFile() const
 {
-	return transientCallbackGiven_;
-}
-
-const std::string& TransientSettings::GetInputWaveFile() const
-{
-	return inputWaveFilename_;
+	return audioFile_;
 }
 
 const std::string& TransientSettings::GetTransientConfigFilename() const
 {
 	return transientConfigFilename_;
-}
-
-std::function<void(std::size_t)> TransientSettings::GetTransientCallback() const
-{
-	return transientCallback_;
 }
 
 double TransientSettings::GetTransientValleyToPeakRatio() const
@@ -123,22 +111,19 @@ const std::vector<std::size_t>& Transients::GetTransients()
 // Uses the TransientDetector in our Signal lib to find transients
 void Transients::GetTransientPositionsFromAudioFile()
 {
-	WaveFile::WaveFileReader waveReader{settings_.GetInputWaveFile()};
-	Signal::TransientDetector transientDetector{waveReader.GetSampleRate()};
+	auto audioFile{settings_.GetAudioFile()};
+	Signal::TransientDetector transientDetector{audioFile->GetSampleRate()};
 	transientDetector.SetValleyToPeakRatio(settings_.GetTransientValleyToPeakRatio());
 
+	std::size_t currentSamplePosition{0};
 	const std::size_t bufferSize{8192};
 
-	std::size_t samplesLeft{waveReader.GetSampleCount()};
+	std::size_t samplesLeft{settings_.GetAudioFile()->GetSampleCount()};
 	while(samplesLeft)
 	{
-		std::size_t samplesToRead{bufferSize};
-		if(samplesToRead > samplesLeft)
-		{
-			samplesToRead = samplesLeft;
-		}
+		std::size_t samplesToRead{std::min(bufferSize, samplesLeft)};
 
-		auto audioData{waveReader.GetAudioData(samplesToRead)};
+		auto audioData{audioFile->ReadAudioStream(settings_.GetStreamID(), currentSamplePosition, samplesToRead)};
 
 		std::vector<std::size_t> newTransients;
 		if(transientDetector.FindTransients(audioData, newTransients))
@@ -146,25 +131,13 @@ void Transients::GetTransientPositionsFromAudioFile()
 			transients_.insert(transients_.end(), newTransients.begin(), newTransients.end());
 		}
 
+		currentSamplePosition += samplesToRead;
 		samplesLeft -= samplesToRead;
 	}
-
-	HandleCallback();
 }
-
 
 void Transients::GetTransientPositionsFromConfigFile()
 {
 	auto transientConfigFile{TransientConfigFile{settings_.GetTransientConfigFilename()}};	
 	transients_ = transientConfigFile.GetTransients();
-	HandleCallback();
 }
-
-void Transients::HandleCallback()
-{
-	if(settings_.TransientCallbackGiven())
-	{
-		std::for_each(transients_.begin(), transients_.end(), settings_.GetTransientCallback());
-	}
-}
-

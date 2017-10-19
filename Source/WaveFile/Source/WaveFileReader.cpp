@@ -25,23 +25,19 @@
  */
 
 #include <WaveFile/WaveFileReader.h>
+#include <Signal/SignalConversion.h>
 #include <Utilities/Exception.h>
 #include <cstdint>
 
- WaveFile::WaveFileReader::WaveFileReader(const std::string& filename, bool bufferSmallFile, std::size_t maxBufferLimit) :
-	filename_{filename},
-	bufferSmallFile_{bufferSmallFile},
-	maxBufferLimit_{maxBufferLimit}
+ WaveFile::WaveFileReader::WaveFileReader(const std::string& filename) : filename_{filename}
 {
 	ReadHeader();
 	ValidateHeader();
-	CacheAudioData();
 	OpenFile();
 }
 
 WaveFile::WaveFileReader::~WaveFileReader()
 {
-	delete [] audioData_;
 	inputFileStream_.close();
 }
 
@@ -153,9 +149,9 @@ void WaveFile::WaveFileReader::ValidateHeader()
 		Utilities::ThrowException("Invalid wave header - bits per sample", filename_, GetBitsPerSample(), __FILE__, __LINE__);
 	}
 
-	if(GetBitsPerSample() != 16 || GetChannels() != 1)
+	if(GetBitsPerSample() != 16)
 	{
-		Utilities::ThrowException("Invalid wave file.  WaveFileReader class currently only supports 16 bit, mono audio ", filename_);
+		Utilities::ThrowException("Invalid wave file.  WaveFileReader class currently only supports 16 bit audio ", filename_);
 	}
 
 }
@@ -221,21 +217,12 @@ std::size_t WaveFile::WaveFileReader::GetChunkSize()
 	return (header_.chunkSize_[3] << 24) + (header_.chunkSize_[2] << 16) + (header_.chunkSize_[1] << 8) + header_.chunkSize_[0];
 }
 
-const double* WaveFile::WaveFileReader::GetAudioData() const
+std::vector<AudioData> WaveFile::WaveFileReader::GetAudioData()
 {
-	if(bufferSmallFile_ == false || GetSampleCount() > maxBufferLimit_)
-	{
-		// We don't cache the audio if the user has specifically said not to 
-		// or the file is larger than the cache limit.  The user should know 
-		// not to call this method and should instead call the other 
-		// GetAudioData() methods.
-		Utilities::ThrowException("WaveFile::WaveFileReader::GetAudioData() called but not audio buffered");
-	}
-
-	return audioData_;
+	return GetAudioData(0, GetSampleCount());
 }
 
-AudioData WaveFile::WaveFileReader::GetAudioData(std::size_t samplesToRead)
+std::vector<AudioData> WaveFile::WaveFileReader::GetAudioData(std::size_t samplesToRead)
 {
 	// First see if we're near the EOF and make sure we don't try and read beyong it as there may be 
 	// metadata and etc there and we don't want to return that as if it were audio data.
@@ -252,30 +239,26 @@ AudioData WaveFile::WaveFileReader::GetAudioData(std::size_t samplesToRead)
 		samplesToRead = samplesRemainingInFile;
 	}
 
-	std::size_t uint8_tsToRead{samplesToRead * GetChannels() * GetBitsPerSample()/8};
-	std::vector<uint8_t> data(uint8_tsToRead);
+	std::size_t shortsToRead{samplesToRead * GetChannels()};
+	std::vector<int16_t> data(shortsToRead);
 
 	// Reinterpret cast here because ifstream's read wants a char* but we want to keep
 	// our uint8_ts we read as unsigned chars (the WaveReeader::uint8_t type).
-	inputFileStream_.read(reinterpret_cast<char*>(data.data()), uint8_tsToRead);
+	inputFileStream_.read(reinterpret_cast<char*>(data.data()), shortsToRead * 2);
 	if(!inputFileStream_.good())
 	{
 		Utilities::Exception(Utilities::Stringify("WaveFileReader::GetAudioData(std::size_t) failed to read audio data from wave file " + filename_));
 	}
 
-	// Then convert the data we just read into AudioData, note this requires transforming the sample from a signed 
-	// 16 bit sample to a 64 bit float.
-	AudioData audioData;
-	for(size_t i = 0; i < uint8_tsToRead; i+=2)
+	if(GetChannels() == 1)
 	{
-		int16_t currentSample{static_cast<int16_t>((data[i + 1] << 8) + data[i])};
-		audioData.PushSample(static_cast<double>(currentSample) / 32768.0);
+		return std::vector<AudioData>{Signal::ConvertSigned16ToAudioData(data)};	
 	}
 
-	return audioData;
+	return Signal::ConvertInterleavedSigned16ToAudioData(data);	
 }
 
-AudioData WaveFile::WaveFileReader::GetAudioData(std::size_t samplesStartPosition, std::size_t samplesToRead)
+std::vector<AudioData> WaveFile::WaveFileReader::GetAudioData(std::size_t samplesStartPosition, std::size_t samplesToRead)
 {
 	FilePointerSeekToSamplePosition(samplesStartPosition);
 	return GetAudioData(samplesToRead);
@@ -284,37 +267,6 @@ AudioData WaveFile::WaveFileReader::GetAudioData(std::size_t samplesStartPositio
 const WaveFile::WaveFileHeader& WaveFile::WaveFileReader::GetHeader()
 {
 	return header_;
-}
-
-void WaveFile::WaveFileReader::CacheAudioData()
-{
-	if(GetBitsPerSample() != 16)
-	{
-		// We currently only support 16 bit samples
-		Utilities::ThrowException("Wave file format not 16 bit data", filename_, GetBitsPerSample(), __FILE__, __LINE__);
-	}
-
-	if(bufferSmallFile_ == false || GetSampleCount() > maxBufferLimit_)
-	{
-		// Don't cache the audio if the user has specifically said not to 
-		// or the file is larger than the cache limit.
-		return;
-	}
-
-	auto audioDataStartByte = 20 + GetSubChunk1Size() + 8;
-	auto audioDataSizeInBytes = GetSubChunk2Size();
-
-	// This reads the audio data as uint8_t values
-	auto audioData = Read(audioDataSizeInBytes, audioDataStartByte);
-
-	audioData_ = new double[GetSampleCount()];
-
-	// This converts the audio data to float 64bit sample size
-	for(size_t i = 0; i < audioDataSizeInBytes; i+=2)
-	{
-		short currentSample = (audioData[i + 1] << 8) + audioData[i];
-		audioData_[i/2] = static_cast<double>(currentSample) / 32768.0;
-	}
 }
 
 std::size_t WaveFile::WaveFileReader::GetSampleCount() const
