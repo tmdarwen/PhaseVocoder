@@ -96,10 +96,6 @@ class PhaseVocoderProcessor
 		std::shared_ptr<ThreadSafeAudioFile::Reader> audioFileReader_;
 		std::shared_ptr<ThreadSafeAudioFile::Writer> audioFileWriter_;
 
-		double transientProcessingTime_{0.0};
-		double phaseVocoderProcessingTime_{0.0};
-		double resamplerProcessingTime_{0.0};
-
 		std::vector<std::size_t> noTransients_;
 
 };

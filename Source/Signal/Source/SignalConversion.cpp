@@ -35,7 +35,6 @@ const int16_t MAX16{32767};
 const int16_t MIN16{-32768};
 
 constexpr double MAX16_FLOAT{32767.0};
-constexpr double MIN16_FLOAT{-32768.0};
 constexpr double MIN16_FLOAT_REVERSE_SIGN{MIN16 * -1.0};
 
 inline int16_t ConvertFloat64SampleToSigned16Sample(double sample)

@@ -30,18 +30,19 @@
 #include <AudioData/AudioData.h>
 #include <Utilities/Exception.h>
 #include <Signal/SignalConversion.h>
+#include <Utilities/Stringify.h>
 
 WaveFile::WaveFileWriter::WaveFileWriter(const std::string& filename, std::size_t channels, std::size_t sampleRate, std::size_t bitsPerSample) :
 	filename_{filename}, channels_{channels}, sampleRate_{sampleRate}, bitsPerSample_{bitsPerSample}, sampleCount_{0}
 {
 	if(channels_ != 1 && channels_ != 2)
 	{
-		Utilities::ThrowException("Attempting to instantiate WaveFileWriter with non-standard channels: " + channels);
+		Utilities::ThrowException(Utilities::Stringify("Attempting to instantiate WaveFileWriter with non-standard channels: ") + Utilities::Stringify(channels));
 	}
 
 	if(bitsPerSample_ != 16)
 	{
-		Utilities::ThrowException("Attempting to instantiate WaveFileWriter Writer with non-standard bit resolution: " + bitsPerSample);
+		Utilities::ThrowException(Utilities::Stringify("Attempting to instantiate WaveFileWriter Writer with non-standard bit resolution: ") + Utilities::Stringify(bitsPerSample));
 	}
 
 	fileStream_.open(filename_, std::ios::out | std::ios::binary);

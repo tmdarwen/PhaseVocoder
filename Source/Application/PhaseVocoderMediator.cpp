@@ -30,6 +30,7 @@
 #include <Signal/PhaseVocoder.h>
 #include <Utilities/Exception.h>
 #include <Utilities/Timer.h>
+#include <thread>
 
 PhaseVocoderMediator::PhaseVocoderMediator(const PhaseVocoderSettings& settings) : settings_{settings}
 {
