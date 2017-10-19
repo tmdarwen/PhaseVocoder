@@ -166,6 +166,8 @@ int PerformPhaseVocoding(CommandLineArguments& commandLineArguments)
 		{
 			DisplayTransients(phaseVocoderMediator);
 		}
+		
+		std::cout << std::endl;  // Newline so prompt displays below output
 	}
 	catch(Utilities::Exception& exception)
 	{
