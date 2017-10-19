@@ -69,16 +69,14 @@ The [Automation directory](/Automation) contains scripts that can be used with [
 
 **Miscellaneous Notes Concerning the Project**
 
--   Currently supports mono 16 bit wave files as the only form of input.
+-   Currently supports 16 bit wave files as the only form of input.
 
 
  
 
 **To Do**
 
--   Support for stereo wave files (currently only supports mono audio) of any bit resolution (currently only supports 16 bit).
-
--   Add multithreading to speed up processing.
+-   Support various other audio file formats.
 
  
 
