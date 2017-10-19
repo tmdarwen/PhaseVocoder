@@ -93,5 +93,6 @@ TEST(UtilitiesTimer, TestTimer)
 	Utilities::Timer timer(Utilities::Timer::Action::START_NOW);
 	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 	auto time = timer.Stop();
-	EXPECT_TRUE(time > 0.9 && time < 1.10);  // Give us a tenth of a second of room for overhead
+	std::cout << "UtilitiesTimer::TestTimer unit test time value: " << time << std::endl;
+	EXPECT_TRUE(time > 0.8 && time < 1.20);  // Give us some room for overhead
 }
