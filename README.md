@@ -83,7 +83,7 @@ The [Automation directory](/Automation) contains scripts that can be used with [
 
 The MIT License applies to this software and its supporting documentation:
 
-*Copyright (c) Terence M. Darwen - tmdarwen.com*
+*Copyright (c) 2017 - Terence M. Darwen - tmdarwen.com*
 
 *Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
