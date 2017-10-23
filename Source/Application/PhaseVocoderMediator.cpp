@@ -106,7 +106,8 @@ std::size_t PhaseVocoderMediator::GetChannelCount() const
 
 std::size_t PhaseVocoderMediator::GetMaxBufferedSamples()
 {
-	return audioFileWriter_->GetMaxBufferedSamples();
+	if(audioFileWriter_) return audioFileWriter_->GetMaxBufferedSamples();
+	else return 0;
 }
 
 const std::vector<std::size_t>& PhaseVocoderMediator::GetTransients(std::size_t streamID)
