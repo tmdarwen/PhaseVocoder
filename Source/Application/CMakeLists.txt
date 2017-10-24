@@ -1,5 +1,3 @@
-#include_directories("${PROJECT_SOURCE_DIR}/Externals/yaml-cpp/include")
-
 if(DEBUG_BUILD)
 	add_definitions(-DDEBUG_BUILD)
 endif(DEBUG_BUILD)
