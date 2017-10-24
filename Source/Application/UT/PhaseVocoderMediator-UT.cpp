@@ -122,13 +122,13 @@ TEST(PhaseVocoderMediator, CompressTest3)
 TEST(PhaseVocoderMediator, ResampleTest1)
 {
 	PhaseVocoderMediatorUT::Resample("BuiltToSpillBeatAbbrev.wav", "BuiltToSpillBeatAbbrevCurrentResample48000.wav", 48000);
-	EXPECT_EQ(true, Utilities::File::CheckIfFilesMatch("BuiltToSpillBeatAbbrev0.25.wav", "BuiltToSpillBeatAbbrevCurrentResult0.25.wav"));
+	EXPECT_EQ(true, Utilities::File::CheckIfFilesMatch("BuiltToSpillBeatAbbrevResample48000.wav", "BuiltToSpillBeatAbbrevCurrentResample48000.wav"));
 }
 
 TEST(PhaseVocoderMediator, ResampleTest2)
 {
 	PhaseVocoderMediatorUT::Resample("BuiltToSpillBeatAbbrev.wav", "BuiltToSpillBeatAbbrevCurrentResample32123.wav", 32123);
-	EXPECT_EQ(true, Utilities::File::CheckIfFilesMatch("BuiltToSpillBeatAbbrev0.25.wav", "BuiltToSpillBeatAbbrevCurrentResult0.25.wav"));
+	EXPECT_EQ(true, Utilities::File::CheckIfFilesMatch("BuiltToSpillBeatAbbrevResample32123.wav", "BuiltToSpillBeatAbbrevCurrentResample32123.wav"));
 }
 
 
