@@ -2,6 +2,7 @@
 include_directories("${PROJECT_SOURCE_DIR}/External/googletest/googletest/include")
 file(GLOB source_files [^.]*.h [^.]*.cpp "../Source/[^.]*.h" "../Source/[^.]*.cpp")
 add_executable(AudioData-UT ${source_files})
+include(${PROJECT_SOURCE_DIR}/CMakeSupport/CMakeLists.CompilerSettings.txt)
 target_link_libraries(AudioData-UT Utilities gtest)
 add_custom_command(TARGET AudioData-UT POST_BUILD COMMAND AudioData-UT --output-on-failure)
 

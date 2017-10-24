@@ -3,6 +3,8 @@ file(GLOB source_files [^.]*.h [^.]*.cpp)
 add_executable(Signal-UT ${source_files})
 target_link_libraries(Signal-UT gtest AudioData Signal Utilities WaveFile)
 
+include(${PROJECT_SOURCE_DIR}/CMakeSupport/CMakeLists.CompilerSettings.txt)
+
 file(GLOB WAV_TEST_FILES ${CMAKE_CURRENT_SOURCE_DIR}/TestAudio/*.wav)
 file(COPY ${WAV_TEST_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 

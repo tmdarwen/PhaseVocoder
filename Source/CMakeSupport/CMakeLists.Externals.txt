@@ -16,6 +16,8 @@ endfunction()
 function(include_externals)
 	# Pulldown GoogleTest
 	if(MSVC)
+		set(CMAKE_CXX_FLAGS_RELEASE "/MT")
+		set(CMAKE_CXX_FLAGS_DEBUG "/MTd")
 		set(gtest_force_shared_crt ON CACHE BOOL "" FORCE) # Prevent GoogleTest from overriding options when building with MSVC
 	endif(MSVC)
 	include_external(CMakeSupport/CMakeLists.GoogleTest.txt googletest)

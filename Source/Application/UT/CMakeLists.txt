@@ -17,6 +17,7 @@ file(GLOB source_files [^.]*.h [^.]*.cpp
 
 #link_directories("${CMAKE_BINARY_DIR}/yamlcpp-build/Debug")
 add_executable(PhaseVocoderApp-UT ${source_files})
+include(${PROJECT_SOURCE_DIR}/CMakeSupport/CMakeLists.CompilerSettings.txt)
 #target_link_libraries(PhaseVocoderApp-UT gtest libyaml-cppmtd AudioData Signal Utilities WaveFile)
 target_link_libraries(PhaseVocoderApp-UT gtest yaml-cpp AudioData Signal ThreadSafeAudioFile Utilities WaveFile)
 
