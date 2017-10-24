@@ -1,7 +1,7 @@
 /*
  * PhaseVocoder
  *
- * Copyright (c) Terence M. Darwen - tmdarwen.com
+ * Copyright (c) 2017 - Terence M. Darwen - tmdarwen.com
  *
  * The MIT License
  *
@@ -64,7 +64,7 @@ void DisplaySimpleUsage()
 
 void DisplayLimitations()
 {
-	std::cout << "Limitations: Supports mono 16 bit uncompressed wave files only." << std::endl;
+	std::cout << "Limitations: Supports 16 bit uncompressed wave files only." << std::endl;
 }
 
 void DisplayCopyrightInfo()

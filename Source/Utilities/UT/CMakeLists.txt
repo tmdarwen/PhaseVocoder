@@ -2,6 +2,7 @@ include_directories("${PROJECT_SOURCE_DIR}/Externals/googletest/googletest/inclu
 file(GLOB source_files [^.]*.h [^.]*.cpp)
 add_executable(Utilities-UT ${source_files})
 target_link_libraries(Utilities-UT gtest gtest_main Utilities)
+include(${PROJECT_SOURCE_DIR}/CMakeSupport/CMakeLists.CompilerSettings.txt)
 file(GLOB TEST_FILES ${CMAKE_CURRENT_SOURCE_DIR}/TestFiles/*)
 file(COPY ${TEST_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 add_custom_command(TARGET Utilities-UT POST_BUILD COMMAND Utilities-UT --output-on-failure)

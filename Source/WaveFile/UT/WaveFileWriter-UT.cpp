@@ -1,7 +1,7 @@
 /*
  * PhaseVocoder
  *
- * Copyright (c) Terence M. Darwen - tmdarwen.com
+ * Copyright (c) 2017 - Terence M. Darwen - tmdarwen.com
  *
  * The MIT License
  *
@@ -39,6 +39,34 @@ TEST(WaveWriterTest, TestInvalidChannels)
 TEST(WaveWriterTest, TestInvalidBitResolution)
 {
 	ASSERT_THROW(WaveFile::WaveFileWriter("TestFile.wav", 1, 44100, 8), Utilities::Exception);
+}
+
+TEST(WaveWriterTest, AppendEmptyVector)
+{
+	// Test trying to append an empty vector of audio data (make sure it doesn't crash)
+	WaveFile::WaveFileWriter waveFileWriter("TestFile.wav", 1, 44100, 16);
+	waveFileWriter.AppendAudioData(std::vector<AudioData>{});
+}
+
+TEST(WaveWriterTest, AppendEmptyAudioDataToMonoChannel)
+{
+	// Test trying to append audio data channel of size zero (make sure it doesn't crash)
+	WaveFile::WaveFileWriter waveFileWriter("TestFile.wav", 1, 44100, 16);
+	AudioData audioData;
+	std::vector<AudioData> audioDataVector;
+	audioDataVector.push_back(audioData);
+	waveFileWriter.AppendAudioData(audioDataVector);
+}
+
+TEST(WaveWriterTest, AppendEmptyAudioDataToStereoChannels)
+{
+	// Test trying to append audio data channel of size zero (make sure it doesn't crash)
+	WaveFile::WaveFileWriter waveFileWriter("TestFile.wav", 2, 44100, 16);
+	AudioData audioData;
+	std::vector<AudioData> audioDataVector;
+	audioDataVector.push_back(audioData);
+	audioDataVector.push_back(audioData);
+	waveFileWriter.AppendAudioData(audioDataVector);
 }
 
 TEST(WaveWriterTest, CreateMonoWaveFileAndVerify)

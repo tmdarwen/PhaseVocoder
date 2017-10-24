@@ -1,7 +1,7 @@
 /*
  * PhaseVocoder
  *
- * Copyright (c) Terence M. Darwen - tmdarwen.com
+ * Copyright (c) 2017 - Terence M. Darwen - tmdarwen.com
  *
  * The MIT License
  *
@@ -96,7 +96,10 @@ std::size_t WaveFile::WaveFileWriter::GetSampleCount()
 
 void WaveFile::WaveFileWriter::AppendAudioData(const std::vector<AudioData>& audioData)
 {
-	if(audioData.size() == 0)
+	// First make sure we've been given data to append
+	if((audioData.size() == 0) || 
+	(channels_ == 1 && audioData[WaveFile::MONO_CHANNEL].GetSize() == 0) || 
+	(channels_ == 2 && audioData[WaveFile::LEFT_CHANNEL].GetSize() == 0 && audioData[WaveFile::RIGHT_CHANNEL].GetSize() == 0))
 	{
 		return;
 	}

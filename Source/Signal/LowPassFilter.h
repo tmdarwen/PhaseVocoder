@@ -1,7 +1,7 @@
 /*
  * PhaseVocoder
  *
- * Copyright (c) Terence M. Darwen - tmdarwen.com
+ * Copyright (c) 2017 - Terence M. Darwen - tmdarwen.com
  *
  * The MIT License
  *

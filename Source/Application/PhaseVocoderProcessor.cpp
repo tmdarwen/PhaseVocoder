@@ -1,7 +1,7 @@
 /*
  * PhaseVocoder
  *
- * Copyright (c) Terence M. Darwen - tmdarwen.com
+ * Copyright (c) 2017 - Terence M. Darwen - tmdarwen.com
  *
  * The MIT License
  *
@@ -214,6 +214,13 @@ void PhaseVocoderProcessor::FinalizeAudioSection(std::size_t totalInputSamples)
 	if(settings_.StretchFactorGiven() || settings_.PitchShiftValueGiven())
 	{
 		std::size_t totalOutputSamplesNeeded{static_cast<std::size_t>(totalInputSamples * phaseVocoder_->GetStretchFactor() + 0.5)};
+
+		// No need to do anything else if we already have the amount of samples we need
+		if(totalOutputSamplesNeeded < samplesOutputFromCurrentPhaseVocoder_)
+		{
+			return;
+		}
+
 		std::size_t samplesStillNeeded{totalOutputSamplesNeeded - samplesOutputFromCurrentPhaseVocoder_};
 
 		audioData = FlushPhaseVocoderOutput(samplesStillNeeded);
