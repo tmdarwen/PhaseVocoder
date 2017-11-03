@@ -1,18 +1,18 @@
 How the PhaseVocoder Works
 ==========================
 
-The PhaseVocoder allows for time expansion/compression and pitch shifting of audio.  The general process involves analyzing input audio and placing it into two different categories: transient components and sinusoidal components.  An audio transient is usually a higher amplitude, short-duration percusive sound occurring at the onset of a sound such as a drum hit or musical note (more info on transient detection [here](TransientDetection.md).  Frequently, audio with more sinusoidal components follows the transient.  The PhaseVocoder works by preserving the transient and stretching or compressing the phase of the sinusoidal components of the input audio.
+The PhaseVocoder allows for time expansion/compression and pitch shifting of audio.  The general process involves analyzing input audio and placing it into two different categories: transient components and sinusoidal components.  An audio transient is usually a higher amplitude, short-duration percusive sound occurring at the onset of a sound such as a drum hit or musical note (more info on transient detection [here](TransientDetection.md)).  Frequently, audio with more sinusoidal components follows the transient.  The PhaseVocoder works by preserving the transient and stretching or compressing the phase of the sinusoidal components of the input audio.
 
 
  
 
 **Time Expansion Example**
 
-The waveform and spectrogram below is that of the first 70 milliseconds of a bass drum.  This audio can be found in the Source/Signal/UT/TestAudio directory of the PhaseVocoder project.  The filename is 808BassDrum.wav.
+The waveform and spectrogram below is that of the first 70 milliseconds of a bass drum.  A wave file of this audio can be found [here](https://github.com/tmdarwen/PhaseVocoder/blob/master/Source/Signal/UT/TestAudio/808BassDrum.wav).
 
 In the waveform, note how the first few milliseconds of audio has an irregular shape and then the waveform follows a sinusoidal shape.
 
-![Bass Drum Waveform](Images/BassDrumWaveform.png)
+<p align="center"> <img src="Images/BassDrumWaveform.png"> </p>
 
 Similarly, in the spectrogram below, note how the first few milliseconds of audio has strong amounts of energy across nearly the entire spectrum of 0 to 8,000 Hz before concentrating at specific lower frequencies.
 
