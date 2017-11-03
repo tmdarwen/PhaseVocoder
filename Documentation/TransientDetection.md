@@ -37,3 +37,14 @@ We use this final valley point to calculate the beginning of the transient.  For
 <p align="center"> <img src="Images/TransientAudioExampleTransientFound.png"> </p>
 
 Another way of considering this process is that we're recursively "zooming in" on the point where the audio transitions from low intensity to high intensity to pinpoint the start of the audio transient.
+
+
+ 
+
+**Transient Qualification**
+
+Of course, not every peak/valley combination is considered a transient.  In order for a peak/valley combination to be considered a transient the peak value must be at least 1.5 times greater than the valley.  Note the image below.  The circled peak and valley combination is not considered a transient since the growth from the valley point to the peak point is less than a ratio of 1.5.
+
+<p align="center"> <img src="Images/TransientQualification.png"> </p>
+
+This ratio can be configured by the user when using the PhaseVocoder.  The `--valleypeakratio` option allows you to set this ratio.  The default ratio is 1.5.
