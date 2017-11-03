@@ -6,7 +6,7 @@ A cross platform command line utility implementing a [phase vocoder](https://en.
 
 **How the PhaseVocoder Works**
 
-For information on how the PhaseVocoder works, please see [this PDF document](Documentation/HowThePhaseVocoderWorks.pdf) I created.
+For information on how the PhaseVocoder works, please see ["How the PhaseVocoder Works"](Documentation/HowThePhaseVocoderWorks.md).
 
  
 
