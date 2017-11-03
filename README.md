@@ -6,7 +6,7 @@ A cross platform command line utility implementing a [phase vocoder](https://en.
 
 **How the PhaseVocoder Works**
 
-For information on how the PhaseVocoder works, please see ["How the PhaseVocoder Works"](Documentation/HowThePhaseVocoderWorks.md).
+For information on how the PhaseVocoder works, please see ["How the PhaseVocoder Works"](Documentation/HowThePhaseVocoderWorks.md).  Additionally, the PhaseVocoder's quality is dependent on detection of audio transients.  Information on how transient detection works can be found [here](Documentation/TransientDetection.md).
 
  
 
