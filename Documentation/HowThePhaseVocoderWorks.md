@@ -1,7 +1,7 @@
 How the PhaseVocoder Works
 ==========================
 
-The PhaseVocoder allows for time expansion/compression and pitch shifting of audio.  The general process involves analyzing input audio and placing it into two different categories: transient components and sinusoidal components.  An audio transient is usually a higher amplitude, short-duration percusive sound occurring at the onset of a sound such as a drum hit or musical note (more info on transient detection [here](TransientDetection.md)).  Frequently, audio with more sinusoidal components follows the transient.  The PhaseVocoder works by preserving the transient and stretching or compressing the phase of the sinusoidal components of the input audio.
+The PhaseVocoder allows for time expansion/compression and pitch shifting of audio.  The general process involves analyzing input audio and placing it into two different categories: transient components and sinusoidal components.  An audio transient is usually a higher amplitude, short-duration percusive sound occurring at the onset of audio such as a drum hit or musical note (more info on transient detection [here](TransientDetection.md)).  Frequently, audio with more sinusoidal components follows the transient.  The PhaseVocoder works by preserving the transient and stretching or compressing the phase of the sinusoidal components of the input audio.
 
 
  
@@ -28,7 +28,7 @@ In order to apply time expansion or compression to the input audio, without degr
 
 **Pitch Shifting**
 
-Shifting the pitch of audio without changing its length is done using a resampler in conjunction with the phase vocoding technique described in earlier pages of this document.  
+Shifting the pitch of audio without changing its length is done using a resampler in conjunction with the phase vocoding technique described above.
 
 The key to understanding pitch shifting is to understand that playing audio back at different sample rates adjusts the pitch of the audio.  For example, if you have audio of a C2 piano note (65.41 Hz) recorded at 44.1 KHz, playing back the audio at twice the sample rate (88.2 KHz) will result in a C3 piano note (130.81 Hz), effectively adjusting the pitch up by an octave.  
 
