@@ -10,7 +10,7 @@ What qualifies audio as being a transient is debatable, and therefore can be dif
 
 **Transient Detection By Example**
 
-In the audio snippet pictured, it's clear we have three transients: One at the very beginning of the audio, one between 0.20 and 0.30 and another one between 0.30 and 0.50.
+In the audio snippet pictured, it's clear we have three transients: One at the very beginning of the audio, one between 0.20 and 0.30 and another one between 0.40 and 0.50.
 
 <p align="center"> <img src="Images/TransientAudioExample.png"> </p>
 
@@ -32,6 +32,8 @@ And then one additional time at a resolution of about one millisecond:
 
 <p align="center"> <img src="Images/TransientAudioExampleMax32Annotated.png"> </p>
 
-We then use the valley point to calculate the beginning of the transient.  For this example, this results in a finding the transient position _immediately before_ the transient occurs as shown below.
+We use this final valley point to calculate the beginning of the transient.  For this example, this results in finding the transient position _immediately before_ the transient occurs as shown below.
 
 <p align="center"> <img src="Images/TransientAudioExampleTransientFound.png"> </p>
+
+Another way of considering this process is that we're recursively "zooming in" on the point where the audio transitions from low intensity to high intensity to pinpoint the start of the audio transient.
