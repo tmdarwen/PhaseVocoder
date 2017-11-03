@@ -47,4 +47,4 @@ Of course, not every peak/valley combination is considered a transient.  In orde
 
 <p align="center"> <img src="Images/TransientQualification.png"> </p>
 
-This ratio can be configured by the user when using the PhaseVocoder.  The `--valleypeakratio` option allows you to set this ratio.  The default ratio is 1.5.
+When using the PhaseVocoder, this ratio can be configured by the user through the `--valleypeakratio`.  This option allows the user to set a specific ratio.  The default ratio is 1.5.  Setting a lower ratio will result in the software more liberally detecting audio transients, setting a higher ratio will cause the software to be more strict when considering if a peak/value combination is a transient.
