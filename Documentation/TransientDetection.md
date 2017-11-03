@@ -43,7 +43,7 @@ Another way of considering this process is that we're recursively "zooming in" o
 
 **Transient Qualification**
 
-Of course, not every peak/valley combination is considered a transient.  In order for a peak/valley combination to be considered a transient the peak value must be at least 1.5 times greater than the valley.  Note the image below.  The circled peak and valley combination is not considered a transient since the growth from the valley point to the peak point is less than a ratio of 1.5.
+Of course, not every peak/valley combination is a transient.  In order for a peak/valley combination to be considered a transient the peak value must be at least 1.5 times greater than the valley.  Note the image below.  The circled peak and valley combination is not considered a transient since the growth from the valley point to the peak point is less than a ratio of 1.5.
 
 <p align="center"> <img src="Images/TransientQualification.png"> </p>
 
