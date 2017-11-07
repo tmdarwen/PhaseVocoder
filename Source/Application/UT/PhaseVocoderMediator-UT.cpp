@@ -240,11 +240,12 @@ TEST(TransientDetectorTests, SpecifcTransientRatioRelaxed)
 {
 	auto transientPositions{SpecificValleyToPeakRatio("SweetEmotion.wav", 2.0)};
 
-	EXPECT_EQ(2, transientPositions.size());
-	if(transientPositions.size() == 2)
+	EXPECT_EQ(3, transientPositions.size());
+	if(transientPositions.size() == 3)
 	{
 		EXPECT_EQ(0, transientPositions[0]);
 		EXPECT_EQ(28512, transientPositions[1]);
+		EXPECT_EQ(125180, transientPositions[2]);
 	}
 }
 

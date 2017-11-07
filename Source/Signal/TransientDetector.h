@@ -78,7 +78,8 @@ class TransientDetector
 
 		std::size_t inputSamplesProcessed_{0};  // Keeps track of how many input samples the transient detector has analyzed
 
-		std::size_t secondsOfPastAudioToRetain_{10};
+		// The amount of audio to preserve from the past when detecting peak/valleys
+		std::size_t secondsOfPastAudioToRetain_{1};
 		std::size_t samplesOfPastAudioToRetain_;
 
 		void CheckForOldAudio();
