@@ -1,5 +1,6 @@
 include_directories("${PROJECT_SOURCE_DIR}/Externals/googletest/googletest/include")
 include_directories("${PROJECT_SOURCE_DIR}/Externals/yaml-cpp/include")
+include_directories("${PROJECT_SOURCE_DIR}/Externals/audiolib/Source")
 
 file(GLOB source_files [^.]*.h [^.]*.cpp 
 	../PhaseVocoderMediator.h 

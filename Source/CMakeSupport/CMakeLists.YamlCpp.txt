@@ -5,7 +5,7 @@ project(yamlcpp-download NONE)
 include(ExternalProject)
 ExternalProject_Add(yamlcpp
   GIT_REPOSITORY    https://github.com/jbeder/yaml-cpp.git
-  GIT_TAG           master
+  GIT_TAG           beb44b872c07c74556314e730c6f20a00b32e8e5
   SOURCE_DIR        "${CMAKE_BINARY_DIR}/yamlcpp-src"
   BINARY_DIR        "${CMAKE_BINARY_DIR}/yamlcpp-build"
   CONFIGURE_COMMAND ""

@@ -1,0 +1,15 @@
+cmake_minimum_required(VERSION 3.0)
+ 
+project(audiolib-download NONE)
+ 
+include(ExternalProject)
+ExternalProject_Add(audiolib
+  GIT_REPOSITORY    https://github.com/tmdarwen/AudioLib
+  GIT_TAG           ""
+  SOURCE_DIR        "${CMAKE_BINARY_DIR}/audiolib-src"
+  BINARY_DIR        "${CMAKE_BINARY_DIR}/audiolib-build"
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND     ""
+  INSTALL_COMMAND   ""
+  TEST_COMMAND      ""
+)
