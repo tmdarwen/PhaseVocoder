@@ -1,29 +1,27 @@
 cmake_minimum_required(VERSION 3.0)
  
-function(include_external cmake_file project_name)
+function(include_external cmake_file project_name subdir)
 	configure_file(${cmake_file} ${project_name}-download/CMakeLists.txt)
 	execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .  WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/${project_name}-download")
 	execute_process(COMMAND "${CMAKE_COMMAND}" --build .  WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/${project_name}-download" )
-	add_subdirectory("${CMAKE_BINARY_DIR}/${project_name}-src" "${CMAKE_BINARY_DIR}/${project_name}-build")
-endfunction()
-function(include_external cmake_file project_name)
-	configure_file(${cmake_file} ${project_name}-download/CMakeLists.txt)
-	execute_process(COMMAND "${CMAKE_COMMAND}" -G "${CMAKE_GENERATOR}" .  WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/${project_name}-download")
-	execute_process(COMMAND "${CMAKE_COMMAND}" --build .  WORKING_DIRECTORY "${CMAKE_BINARY_DIR}/${project_name}-download" )
-	add_subdirectory("${CMAKE_BINARY_DIR}/${project_name}-src" "${CMAKE_BINARY_DIR}/${project_name}-build")
+	add_subdirectory("${CMAKE_BINARY_DIR}/${project_name}-src/${subdir}" "${CMAKE_BINARY_DIR}/${project_name}-build")
 endfunction()
 
 function(include_externals)
 	# Pulldown GoogleTest
-	if(MSVC)
-		set(CMAKE_CXX_FLAGS_RELEASE "/MT")
-		set(CMAKE_CXX_FLAGS_DEBUG "/MTd")
-		set(gtest_force_shared_crt ON CACHE BOOL "" FORCE) # Prevent GoogleTest from overriding options when building with MSVC
+	 if(MSVC)
+	 	set(CMAKE_CXX_FLAGS_RELEASE "/MT")
+	 	set(CMAKE_CXX_FLAGS_DEBUG "/MTd")
+	 	set(gtest_force_shared_crt ON CACHE BOOL "" FORCE) # Prevent GoogleTest from overriding options when building with MSVC
 	endif(MSVC)
-	include_external(CMakeSupport/CMakeLists.GoogleTest.txt googletest)
+	include_external(CMakeSupport/CMakeLists.GoogleTest.txt googletest "")
 	
 	# Pulldown YamlCpp
 	option(YAML_CPP_BUILD_TOOLS "Enable testing and parse tools" OFF)
 	option(MSVC_SHARED_RT "MSVC: Build with shared runtime libs (/MD)" OFF)
-	include_external(CMakeSupport/CMakeLists.YamlCpp.txt yamlcpp)
+	include_external(CMakeSupport/CMakeLists.YamlCpp.txt yamlcpp "")
+
+	# Pulldown AudioLib
+	option(INCLUDE_GOOGLE_TEST "Pulldown GoogleTest and include it in the project" OFF)
+	include_external(CMakeSupport/CMakeLists.AudioLib.txt audiolib Source)
 endfunction()	

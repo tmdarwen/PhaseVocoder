@@ -10,8 +10,10 @@ if(BUILD_NUMBER)
 	add_definitions(-DBUILD_NUMBER=${BUILD_NUMBER})
 endif(BUILD_NUMBER)
 
-file(GLOB source_files [^.]*.h [^.]*.cpp)
+include_directories("${PROJECT_SOURCE_DIR}" "${CMAKE_BINARY_DIR}/audiolib-src/Source")
 include_directories("${PROJECT_SOURCE_DIR}" "${CMAKE_BINARY_DIR}/yamlcpp-src/include")
+
+file(GLOB source_files [^.]*.h [^.]*.cpp)
 find_package(Threads)
 add_executable(PhaseVocoder ${source_files})
 include(${PROJECT_SOURCE_DIR}/CMakeSupport/CMakeLists.CompilerSettings.txt)
