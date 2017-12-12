@@ -5,7 +5,7 @@ project(audiolib-download NONE)
 include(ExternalProject)
 ExternalProject_Add(audiolib
   GIT_REPOSITORY    https://github.com/tmdarwen/AudioLib
-  GIT_TAG           ""
+  GIT_TAG           "v0.2.0"
   SOURCE_DIR        "${CMAKE_BINARY_DIR}/audiolib-src"
   BINARY_DIR        "${CMAKE_BINARY_DIR}/audiolib-build"
   CONFIGURE_COMMAND ""
