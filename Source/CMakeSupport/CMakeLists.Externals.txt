@@ -10,6 +10,8 @@ endfunction()
 function(include_externals)
 	# Pulldown GoogleTest
 	 if(MSVC)
+		# The following is needed for compiling with MSVC C++ compiler v15.5 b/c of deprecation of std::tr1 namespace
+		add_definitions(-D_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING)
 	 	set(CMAKE_CXX_FLAGS_RELEASE "/MT")
 	 	set(CMAKE_CXX_FLAGS_DEBUG "/MTd")
 	 	set(gtest_force_shared_crt ON CACHE BOOL "" FORCE) # Prevent GoogleTest from overriding options when building with MSVC
