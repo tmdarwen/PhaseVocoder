@@ -1,4 +1,5 @@
 call "%VisualStudioPath%\vcvarsall.bat" amd64
+cd %WORKSPACE%
 mkdir PhaseVocoderBuilt
 cd PhaseVocoderBuilt
 cmake -G "%CMakeGeneratorString%" ../Source
