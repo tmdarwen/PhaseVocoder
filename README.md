@@ -30,7 +30,7 @@ For information on how the PhaseVocoder works, please see ["How the PhaseVocoder
 
 1.   From the command line, run _cmake -G YourDesiredGeneratorType ../PhaseVocoder/Source_
 
-1.   Build the project
+1.   Run make or open the project file in an IDE and build.
 
  
 
