@@ -6,7 +6,7 @@ A cross platform command line utility implementing a [phase vocoder](https://en.
 
 **How the PhaseVocoder Works**
 
-For information on how the PhaseVocoder works, please see ["How the PhaseVocoder Works"](Documentation/HowThePhaseVocoderWorks.md).  Additionally, the PhaseVocoder's quality is dependent on detection of audio transients.  Information on how transient detection works can be found [here](Documentation/TransientDetection.md).
+For information on how the PhaseVocoder works, please see ["How the PhaseVocoder Works"](https://github.com/tmdarwen/AudioLib/blob/master/Documentation/HowThePhaseVocoderWorks.md).  Additionally, the PhaseVocoder's quality is dependent on detection of audio transients.  Information on how transient detection works can be found [here](https://github.com/tmdarwen/AudioLib/blob/master/Documentation/TransientDetection.md).
 
  
 
@@ -16,7 +16,7 @@ For information on how the PhaseVocoder works, please see ["How the PhaseVocoder
 
 -   Building this project requires a C++14 compliant compiler.  This project is routinely built in my continous integration system which uses MS Visual Studio 2017, GCC 5.3.1 and Apple LLVM version 7.3.0 (clang 703.0.31).
 
--   External dependencies are [GoogleTest](https://github.com/google/googletest) and [yaml-cpp](https://github.com/jbeder/yaml-cpp).  You do *not* need to clone or install these dependencies manually. The GitHub repos will be cloned automatically when CMake runs.
+-   External dependencies are my [AudioLib](https://github.com/tmdarwen/AudioLib), [GoogleTest](https://github.com/google/googletest) and [yaml-cpp](https://github.com/jbeder/yaml-cpp).  You do *not* need to clone or install these dependencies manually. The GitHub repos will be cloned automatically when CMake runs.
  
 
 **Steps for Building**
